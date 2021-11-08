@@ -49,8 +49,12 @@
    background-image: url("images/Workspace_background.jpg");
 }
 
+.fontStyle{
+   font-family: Arial, sans-serif;
+}
 .container{
    /* TODO: vertically middle */
+   margin-top: 15%; /*not the best solution*/
    padding: 5%;
    background-color: rgba(92, 131, 165, 0.377);
    margin-left: 25%;
@@ -74,10 +78,17 @@
 .margin5px{
    margin: 5px;
 }
+.marginTop50px{
+   margin-top: 50px;
+}
+
 .buttonStyle{
    border-radius: 5px;
    color: rgb(255, 255, 255);
    background-color: rgba(92, 131, 165, 1);
+   border-width: 2px;
    border-color: rgb(255, 255, 255);
-   padding: 3px;
+   padding: 10px;
+   font-size: medium;
+   font-weight: bold;
 }

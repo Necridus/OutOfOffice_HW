@@ -8,7 +8,7 @@
         <title>Login - Out Of Office</title>
         <link rel="stylesheet" href="style.css">
     </head>
-    <body class="textCenter bodyBackground">
+    <body class="textCenter bodyBackground fontStyle">
         
         <div class="container">
 
@@ -40,7 +40,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <input type="submit" class="buttonStyle margin5px" value="Bejelentkezés">
+                        <input type="submit" class="buttonStyle margin5px marginTop50px" value="Bejelentkezés">
                     </form>     
                 </div>
             </div>
