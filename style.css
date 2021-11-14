@@ -60,35 +60,3 @@
    margin-left: 25%;
    margin-right: 25%;
 }
-
-.textCenter{
-   text-align: center;
-}
-
-.center{
-   text-align: center;
-   margin-left: auto;
-   margin-right: auto;
-}
-
-.bold{
-   font-weight: bold;
-}
-
-.margin5px{
-   margin: 5px;
-}
-.marginTop50px{
-   margin-top: 50px;
-}
-
-.buttonStyle{
-   border-radius: 5px;
-   color: rgb(255, 255, 255);
-   background-color: rgba(92, 131, 165, 1);
-   border-width: 2px;
-   border-color: rgb(255, 255, 255);
-   padding: 10px;
-   font-size: medium;
-   font-weight: bold;
-}
