@@ -24,14 +24,14 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <form action="CheckLogin.php" method="POST">
+                    <form action="CheckLogin.php" onSubmit="return blankCheck()" method="POST">
                         <table class="text-center d-flex justify-content-center">
                             <tr class="m-5">
                                 <td class="fw-bold text-uppercase text-end">
                                     Felhasználónév:
                                 </td>
                                 <td>
-                                    <input type="text" name="username">
+                                    <input type="text" name="username" id="username">
                                 </td>
                             </tr>
                             <tr class="m-2">
@@ -39,16 +39,39 @@
                                     Jelszó:
                                 </td>
                                 <td>
-                                    <input type="password" name="password">
+                                    <input type="password" name="password" id="password">
                                 </td>
                             </tr>
                         </table>
-                        <input type="submit" class="btn btn-primary m-2 mt-5 text-uppercase" value="Bejelentkezés">
+                        <input type="submit" name="submit" class="btn btn-primary m-2 mt-5 text-uppercase" value="Bejelentkezés">
                     </form>     
                 </div>
-            </div>
+                
+                <div class="col-12 text-danger" id="errors">
 
+                </div>
+                    <?php
+                        if (isset($_GET["nomatch"])) {
+                            if ($_GET["nomatch"]) {
+                                echo "<h3>Hibás felhasználónév vagy jelszó</h3>";
+                            }
+                        }
+                    ?>
+            </div>
         </div>
 
+        <script>
+			function blankCheck(){
+				var errormsg = '<h3> Töltsd ki mindkét mezőt!</h3>';
+				if (document.getElementById("username").value == '' || document.getElementById("password").value == '')
+				{
+					document.getElementById("errors").innerHTML = errormsg;
+					return false;
+				}
+				else {
+					return true;
+				}
+			}
+		</script>
     </body>
 </html>
