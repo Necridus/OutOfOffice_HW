@@ -1,4 +1,5 @@
 <?php
+    ob_start();
     header("Content-type: text/html; charset=utf-8");
 
     session_start();
@@ -17,7 +18,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="OOOstyle.css">
     </head>
-    <body class="bodyBackground fontFormat">
+    <body class="bodyBackground fontFormat fw-bold">
         <div class="row d-flex justify-content-center">
         
             <a href="UserManager.php" class="adminPageContainer rounded col-4">
@@ -37,7 +38,9 @@
                         kezelése
                     </h1>
             </a>
-
+            <div class="row fixed-bottom text-end">
+                <a href=Logout.php>Kijelentkezés</a>
+            </div>
         </div>
     </body>
 </html>

@@ -12,7 +12,7 @@ header("Content-type: text/html; charset=utf-8");
 
             if($_SESSION['Loggedin']){     
                 session_destroy();         
-                header("Location: login.php");
+                header("Location:Login.php");
             } 
         ?>
     </body>

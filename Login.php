@@ -1,4 +1,5 @@
 <?php
+    ob_start();
     header("Content-type: text/html; charset=utf-8");
 ?>
 <!DOCTYPE HTML>
@@ -53,7 +54,7 @@
                     <?php
                         if (isset($_GET["nomatch"])) {
                             if ($_GET["nomatch"]) {
-                                echo "<h3>Hibás felhasználónév vagy jelszó</h3>";
+                                echo "<h3 class='text-danger'>Hibás felhasználónév vagy jelszó!</h3>";
                             }
                         }
                     ?>
@@ -62,7 +63,7 @@
 
         <script>
 			function blankCheck(){
-				var errormsg = '<h3> Töltsd ki mindkét mezőt!</h3>';
+				var errormsg = '<h3> Töltse ki mindkét mezőt!</h3>';
 				if (document.getElementById("username").value == '' || document.getElementById("password").value == '')
 				{
 					document.getElementById("errors").innerHTML = errormsg;
