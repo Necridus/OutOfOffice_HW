@@ -27,13 +27,12 @@
                     if ($userRecord['IsAdmin'] == 1)
                     {
                         $_SESSION['IsAdmin'] = true;
-                        header("location:AdminMenu.php");
+                        header("location:MainAdminPage.php");
                     }
                     else
                     {
                         $_SESSION['IsAdmin'] = false;
-                        echo 'sima user';
-                        // header("location: KELL A FÁJL NEVE .php");
+                        header("location:UserPage.php");
                     }
 				}
 				else

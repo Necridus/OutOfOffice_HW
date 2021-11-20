@@ -19,27 +19,11 @@
         <link rel="stylesheet" href="OOOstyle.css">
     </head>
     <body class="bodyBackground fontFormat fw-bold">
-        <div class="row d-flex justify-content-center">
-        
-            <a href="UserManager.php" class="adminPageContainer rounded col-4">
-                    <h1 class="text-center text-uppercase">
-                        Felhasználók
-                    </h1>
-                    <h1 class="text-center text-uppercase">
-                        kezelése
-                    </h1>
-            </a>
-            
-            <a href="OutOfOfficeManager.php" class="adminPageContainer rounded col-4">
-                    <h1 class="text-center text-uppercase">
-                        Szabadságok
-                    </h1>
-                    <h1 class="text-center text-uppercase">
-                        kezelése
-                    </h1>
-            </a>
-            <div class="row fixed-bottom text-end">
-                <a href=Logout.php>Kijelentkezés</a>
+
+            <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
+                    <a href=Logout.php class="col-1 text-end btn btn-secondary fw-bold">
+                        Kijelentkezés
+                    </a>
             </div>
         </div>
     </body>

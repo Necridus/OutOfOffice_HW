@@ -1,5 +1,13 @@
 <?php
+    ob_start();
     header("Content-type: text/html; charset=utf-8");
+
+    session_start();
+    if (!$_SESSION['Loggedin'])
+    {
+        header("Location:Login.php");
+        exit;
+    }
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -11,6 +19,18 @@
         <link rel="stylesheet" href="OOOstyle.css">
     </head>
     <body class="bodyBackground fontStyle">
+
+        <div class="row d-flex justify-content-start fixed-top p-0 m-0">
+                <a href=MainAdminPage.php class="col-1 text-center btn btn-secondary fw-bold">
+                    < Vissza
+                </a>
+        </div>
+
+        <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
+                    <a href=Logout.php class="col-1 text-end btn btn-secondary fw-bold">
+                        Kijelentkezés
+                    </a>
+            </div>
 
 
     </body>
