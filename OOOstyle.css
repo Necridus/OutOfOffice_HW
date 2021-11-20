@@ -75,6 +75,14 @@
    backdrop-filter: blur(30px);
 }
 
+.commonContainer{
+   margin-top: 5%;
+   margin-bottom: 5%;
+   padding: 15px;
+   background-color: rgba(92, 131, 165, 0.377);
+   backdrop-filter: blur(30px);
+}
+
 a:link {
    text-decoration: none;
  }
