@@ -34,19 +34,24 @@
             $validTo = date("Y-m-d H:i:s");
 
             $selectedStatus = $_POST['selectedStatus'];
-            
-            $setValidTo = "UPDATE Requests set ValidTo = '$validTo' WHERE ID = '$ID'";
 
-            if (!mysqli_query($connection, $setValidTo)){
-                die(mysqli_error($connection));
+            $queryRequest = mysqli_query($connection,"SELECT * FROM Requests WHERE ID = '$ID'");
+            $row = mysqli_fetch_assoc($queryRequest);
+
+            if ($row['Status'] != $selectedStatus)
+            {
+                $setValidTo = "UPDATE Requests set ValidTo = '$validTo' WHERE ID = '$ID'";
+
+                if (!mysqli_query($connection, $setValidTo)){
+                    die(mysqli_error($connection));
+                }
+
+                $insertIntoRequests = "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','$selectedStatus','$validFrom', NULL)";
+
+                if (!mysqli_query($connection, $insertIntoRequests)){
+                    die(mysqli_error($connection));
+                }
             }
-
-            $insertIntoRequests = "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','$selectedStatus','$validFrom', NULL)";
-
-            if (!mysqli_query($connection, $insertIntoRequests)){
-                die(mysqli_error($connection));
-            }
-            
             unset($_POST['submitChange']);
         }
     ?>
@@ -88,7 +93,7 @@
                     </h1>
 
                     <?php
-                    $queryRequests = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL");
+                    $queryAllRequests = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL ORDER BY Requests.StartDate");
 					?>
 
 					<table class="col-12 table table-striped table-bordered table-hover text-center">
@@ -109,7 +114,7 @@
 						
 						<?php
                             $rowNumber = 0;
-							while($row = mysqli_fetch_assoc($queryRequests))
+							while($row = mysqli_fetch_assoc($queryAllRequests))
 							{
 						?>
 						<tr>
