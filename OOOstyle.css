@@ -47,7 +47,8 @@
 
 .bodyBackground{
    background-image: url("images/workspace_background.jpg");
-
+   background-repeat: no-repeat;
+   background-attachment: fixed;
 }
 
 .fontFormat{

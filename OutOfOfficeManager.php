@@ -20,6 +20,36 @@
         <link rel="stylesheet" href="OOOstyle.css">
     </head>
 
+
+    <?php
+        if(isset($_POST['submitChange']))
+        {
+            $ID = $_POST['ID'];
+            $userID = $_POST['UserID'];
+            $startDate = $_POST['StartDate'];
+            $endDate = $_POST['EndDate'];
+            $status = $_POST['Status'];
+
+            $validFrom = date("Y-m-d H:i:s");
+            $validTo = date("Y-m-d H:i:s");
+
+            $selectedStatus = $_POST['selectedStatus'];
+            
+            $setValidTo = "UPDATE Requests set ValidTo = '$validTo' WHERE ID = '$ID'";
+
+            if (!mysqli_query($connection, $setValidTo)){
+                die(mysqli_error($connection));
+            }
+
+            $insertIntoRequests = "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','$selectedStatus','$validFrom', NULL)";
+
+            if (!mysqli_query($connection, $insertIntoRequests)){
+                die(mysqli_error($connection));
+            }
+            
+            unset($_POST['submitChange']);
+        }
+    ?>
     <script>
             function ChooseConditionalBGColor(rowNumber){
                
@@ -41,10 +71,11 @@
                     document.getElementById(containerName).className = "bg-danger";
                 }
             }
+
         </script>
 
-    <body class="bodyBackground fontStyle">
-
+    <body class="bodyBackground fontStyle fw-bold">
+    
         <div class="row d-flex justify-content-start fixed-top p-0 m-0">
                 <a href=MainAdminPage.php class="col-1 text-center btn btn-secondary fw-bold">
                     < Vissza
@@ -53,11 +84,11 @@
         <div class="d-flex justify-content-center">
             <div class="commonContainer rounded col-10">
                     <h1 class="text-center text-uppercase fw-bold">
-                        Benyújtott szabadságok
+                        Benyújtott szabadságkérések
                     </h1>
 
                     <?php
-                    $queryRequests = mysqli_query($connection, "SELECT Users.Name, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL");
+                    $queryRequests = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL");
 					?>
 
 					<table class="col-12 table table-striped table-bordered table-hover text-center">
@@ -83,7 +114,7 @@
 						?>
 						<tr>
 							<td>
-								<?php echo ($row['Name']); ?>
+                                <?php echo ($row['Name']); ?>
 							</td>
 							<td>
 								<?php echo ($row['StartDate']); ?>
@@ -98,7 +129,16 @@
                                 
 							</td>
                             <td>
-								<?php echo "Módosítás"; ?>
+                                <form action="ChangeStatus.php" method="POST">
+                                    <input type="hidden" name="ID" value="<?php echo ($row['ID']); ?>">
+                                    <input type="hidden" name="Name" value="<?php echo ($row['Name']); ?>">
+                                    <input type="hidden" name="UserID" value="<?php echo ($row['UserID']); ?>">
+                                    <input type="hidden" name="StartDate" value="<?php echo ($row['StartDate']); ?>">
+                                    <input type="hidden" name="EndDate" value="<?php echo ($row['EndDate']);?>">
+                                    <input type="hidden" name="Status" value="<?php echo ($row['Status']);?>">
+                                    <input type="submit" class="btn btn-link p-0 m-0" value="Módosítás">
+                                </form>
+                                
 							</td>
 						</tr>
 						
