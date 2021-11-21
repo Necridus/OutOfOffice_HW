@@ -46,7 +46,7 @@
 }
 
 .bodyBackground{
-   background-image: url("images/workspace_background.jpg");
+   background-image: url("images/workspace_background.png");
    background-repeat: no-repeat;
    background-attachment: fixed;
 }
@@ -79,7 +79,7 @@
 .commonContainer{
    margin-top: 5%;
    margin-bottom: 5%;
-   padding: 15px;
+   padding: 30px;
    background-color: rgba(92, 131, 165, 0.377);
    backdrop-filter: blur(30px);
 }
