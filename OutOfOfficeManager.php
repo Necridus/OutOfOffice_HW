@@ -38,18 +38,21 @@
             $queryRequest = mysqli_query($connection,"SELECT * FROM Requests WHERE ID = '$ID'");
             $row = mysqli_fetch_assoc($queryRequest);
 
-            if ($row['Status'] != $selectedStatus)
+            if (mysqli_num_rows($queryRequest) != 0)
             {
-                $setValidTo = "UPDATE Requests set ValidTo = '$validTo' WHERE ID = '$ID'";
+                if ($row['Status'] != $selectedStatus)
+                {
+                    $setValidTo = "UPDATE Requests set ValidTo = '$validTo' WHERE ID = '$ID'";
 
-                if (!mysqli_query($connection, $setValidTo)){
-                    die(mysqli_error($connection));
-                }
+                    if (!mysqli_query($connection, $setValidTo)){
+                        die(mysqli_error($connection));
+                    }
 
-                $insertIntoRequests = "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','$selectedStatus','$validFrom', NULL)";
+                    $insertIntoRequests = "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','$selectedStatus','$validFrom', NULL)";
 
-                if (!mysqli_query($connection, $insertIntoRequests)){
-                    die(mysqli_error($connection));
+                    if (!mysqli_query($connection, $insertIntoRequests)){
+                        die(mysqli_error($connection));
+                    }
                 }
             }
             unset($_POST['submitChange']);
