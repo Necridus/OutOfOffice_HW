@@ -19,7 +19,6 @@ require_once('Connect.php');
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="OOOstyle.css">
 </head>
-
 <body class="bodyBackground fontFormat fw-bold">
 
 <div class="row d-flex justify-content-start fixed-top p-0 m-0">
@@ -36,11 +35,30 @@ require_once('Connect.php');
             <h2 class="text-secondary fw-bold">Hello, <?php echo $_SESSION['Username'] ?>!</h2>
 
             <?php
+            
+            function deleteRequest() {
+                //A függvény nem látja a globális változókat ($connection)
+                include('Connect.php');
+                $id = $_GET['requestToBeDeleted'];
+                $deleteQuery = "DELETE FROM Requests WHERE ID=$id";
+                if ($connection->query($deleteQuery) === TRUE) {
+                    echo "<script>alert('Szabadság kérelem eltávolítva')</script>";
+                  } else {
+                    echo "<script>alert('Nem sikerült eltávolítani a szabadság kérelmet')</script>";
+                  }
+            }
+          
+            if (isset($_GET['requestToBeDeleted'])) {
+              deleteRequest();
+            }
+          
             $username = $_SESSION['Username'];
-            $queryMyRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' ORDER BY Requests.ID");
-            if (mysqli_num_rows($queryMyRequests) != 0) {
+            $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= CURDATE() ORDER BY Requests.ID");
+            $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate < CURDATE() ORDER BY Requests.ID");
+
+            if (mysqli_num_rows($queryMyUpcomingRequests) != 0) {
             ?>
-                <h1 class="text-center fw-bold">Szabadságaim</h1>
+                <h1 class="text-center fw-bold">Közelgő szabadságaim</h1>
 
                 <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
                     <tr class="thead-dark fw-bold text-uppercase">
@@ -56,9 +74,12 @@ require_once('Connect.php');
                         <td>
                             Állapot
                         </td>
+                        <td>
+                            Műveletek
+                        </td>
                     </tr>
                     <?php
-                    while ($row = mysqli_fetch_assoc($queryMyRequests)) {
+                    while ($row = mysqli_fetch_assoc($queryMyUpcomingRequests)) {
 
                     ?>
 
@@ -75,36 +96,70 @@ require_once('Connect.php');
                             <td>
                                 <?php echo ($row['Status']); ?>
                             </td>
+                            <td>
+                            <form method="post">
+                                <!--Forrás: https://stackoverflow.com/questions/19323010/execute-php-function-with-onclick-->
+                                <a class="btn btn-link p-0 m-0"href='ListRequests.php?requestToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
+                            </form>
+                            </td>
                         </tr>
                 <?php
                     }
                 }
-                
                 ?>
                 </table>
-                <?php
-                /*
-                //TO DO: szabadságlétrehozó oldal létrehozása
-                    $startDate = $_POST['startDate'];
-                    $endDate = $_POST['endDate'];
-                    $validFrom = date("Y-m-d H:i:s");
-                    $userID = $connection->query("SELECT Users.ID FROM Users WHERE UserName = '$username'")->fetch_object()->ID;
-                    $createTimeOffRequestQuery = "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','Függőben','$validFrom', NULL)";
-                    */
-
-                ?>
-                <h1 class="text-center fw-bold">Új szabadság létrehozása</h1>
-                <form method="POST" action="<?php print $_SERVER['PHP_SELF']; ?>">
-                    Szabadság kezdete: <input type="date" name="startDate">
-                    Szabadság vége: <input type="date" name="endDate">
-                    <input type="submit" text="OK">
-                </form>
-
-
-
-
         </div>
     </div>
+
+    <?php
+    if (mysqli_num_rows($queryMyUpcomingRequests) != 0) {
+        ?>
+    <div class="d-flex justify-content-center">
+        <div class="commonContainer rounded col-10">
+        <h1 class="text-center fw-bold">Korábbi szabadságaim</h1>
+        <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
+                    <tr class="thead-dark fw-bold text-uppercase">
+                        <td>
+                            Létrehozás dátuma
+                        </td>
+                        <td>
+                            Szabadság kezdete
+                        </td>
+                        <td>
+                            Szabadság vége
+                        </td>
+                        <td>
+                            Állapot
+                        </td>
+
+                    </tr>
+                    <?php
+                    while ($row = mysqli_fetch_assoc($queryMyPastRequests)) {
+
+                    ?>
+
+                        <tr>
+                            <td>
+                                <?php echo ($row['ValidFrom']); ?>
+                            </td>
+                            <td>
+                                <?php echo ($row['StartDate']); ?>
+                            </td>
+                            <td>
+                                <?php echo ($row['EndDate']); ?>
+                            </td>
+                            <td>
+                                <?php echo ($row['Status']); ?>
+                            </td>
+
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
+                </table>
+        </div>
+        </div>
 
     <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
         <a href=Logout.php class="col-1 text-end btn btn-secondary fw-bold">

@@ -19,7 +19,16 @@ require_once('Connect.php');
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="OOOstyle.css">
 </head>
-
+<script>
+    function validateForm() {
+        let startDate = document.forms["myForm"]["startDate"].value;
+        let endDate = document.forms["myForm"]["endDate"].value;
+        if (startDate == "" || endDate == "") {
+            alert("Dates must be filled out");
+            return false;
+        }
+    }
+</script>
 <body class="bodyBackground fontFormat fw-bold">
 
     <div class="row d-flex justify-content-start fixed-top p-0 m-0">
@@ -34,8 +43,33 @@ require_once('Connect.php');
     <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-10">
             <h2 class="text-secondary fw-bold">Hello, <?php echo $_SESSION['Username'] ?>!</h2>
+            <h1 class="text-center fw-bold">Új szabadság létrehozása</h1>
+            <form name="myForm" method="post"  onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF']?>">
+                Szabadság kezdete: <input type="date" name="startDate"> <br>
+                Szabadság vége: <input type="date" name="endDate">
+                <input type="submit" value="Küld">
+            </form>
 
-        </div>
+    <?php
+        $username = $_SESSION['Username'];
+        if (!empty($_POST)){
+            $startDate = $_POST['startDate'];
+            $endDate = $_POST['endDate'];
+            $validFrom = date("Y-m-d H:i:s");
+            $userID = $connection->query("SELECT Users.ID FROM Users WHERE UserName = '$username'")->fetch_object()->ID;
+            $result = mysqli_query($connection, "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','Függőben','$validFrom', NULL)");
+            if($result)
+            {
+                echo "<script>alert('Szabadság kérelem sikeresen létrehozva')</script>";
+            }
+            else
+            {
+                echo "<script>alert('Nem sikerült továbbítani a kérést az adatbázis számára')</script>";
+            }
+        }
+    ?>
+
+</div>
     </div>
 
     <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
