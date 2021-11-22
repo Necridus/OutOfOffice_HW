@@ -36,11 +36,11 @@
             $selectedStatus = $_POST['selectedStatus'];
 
             $queryRequest = mysqli_query($connection,"SELECT * FROM Requests WHERE ID = '$ID'");
-            $row = mysqli_fetch_assoc($queryRequest);
+            $request = mysqli_fetch_assoc($queryRequest);
 
             if (mysqli_num_rows($queryRequest) != 0)
             {
-                if ($row['Status'] != $selectedStatus)
+                if ($request['Status'] != $selectedStatus)
                 {
                     $setValidTo = "UPDATE Requests set ValidTo = '$validTo' WHERE ID = '$ID'";
 
@@ -53,6 +53,17 @@
                     if (!mysqli_query($connection, $insertIntoRequests)){
                         die(mysqli_error($connection));
                     }
+                    
+                    $queryUserDetails = mysqli_query($connection,"SELECT * FROM Users WHERE ID = '$userID'");
+                    $user = mysqli_fetch_assoc($queryUserDetails);
+                    
+                    $sendMail = mail($user['EmailAdress'],"Out Of Office Request with starting Date".$startDate."was modified", "Dear ".$user['Name']."! \n\n Your Request status is modified to: ".$selectedStatus."! \n Log in to http://portalbce.hu/DF9YEV/OutOfOffice_HW/Login.php to see your Requests and their current states. \n\n This is an automated message sent by the server, please don't respond to this, contact the administrators instead.");
+
+                    if( $sendMail == true ) {
+                        echo '<script>alert("Message was sent successfully...")</script>';
+                     }else {
+                        echo '<script>alert("Message could not be sent...")</script>';
+                     }
                 }
             }
             unset($_POST['submitChange']);
