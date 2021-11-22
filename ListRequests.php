@@ -14,13 +14,22 @@ require_once('Connect.php');
 
 <head>
     <meta charset="utf-8">
-    <title>Admin - Out Of Office</title>
+    <title>My Requests - Out Of Office</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="OOOstyle.css">
 </head>
 
 <body class="bodyBackground fontFormat fw-bold">
+
+<div class="row d-flex justify-content-start fixed-top p-0 m-0">
+                <a href=MainUserPage.php class="col-1 text-center btn btn-secondary fw-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"></path>
+                    </svg>
+                    Vissza
+                </a>
+        </div>
 
     <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-10">

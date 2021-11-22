@@ -32,7 +32,7 @@
                     else
                     {
                         $_SESSION['IsAdmin'] = false;
-                        header("location:UserPage.php");
+                        header("location:MainUserPage.php");
                     }
 				}
 				else
