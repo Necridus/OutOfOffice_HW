@@ -13,6 +13,9 @@ require_once('Connect.php');
 <html>
 
 <head>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
     <meta charset="utf-8">
     <title>Create Request - Out Of Office</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -45,9 +48,9 @@ require_once('Connect.php');
             <h2 class="text-secondary fw-bold">Hello, <?php echo $_SESSION['Username'] ?>!</h2>
             <h1 class="text-center fw-bold">Új szabadság létrehozása</h1>
             <form name="myForm" method="post"  onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF']?>">
-                Szabadság kezdete: <input type="date" name="startDate"> <br>
-                Szabadság vége: <input type="date" name="endDate">
-                <input type="submit" value="Küld">
+                <p>Szabadság kezdete: <input type="date" name="startDate"> <br></p>
+                <p>Szabadság vége: <input type="date" name="endDate"> <br></p>
+                <p><input type="submit" value="Küld"></p>
             </form>
 
     <?php
@@ -60,7 +63,7 @@ require_once('Connect.php');
             $result = mysqli_query($connection, "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','Függőben','$validFrom', NULL)");
             if($result)
             {
-                echo "<script>alert('Szabadság kérelem sikeresen létrehozva')</script>";
+                echo "<script type='text/javascript'>toastr.success('Szabadság kérelem sikeresen létrehozva')</script>";
             }
             else
             {
