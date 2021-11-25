@@ -46,10 +46,10 @@ require_once('Connect.php');
     <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-10">
             <h2 class="text-secondary fw-bold">Hello, <?php echo $_SESSION['Username'] ?>!</h2>
-            <h1 class="text-center fw-bold">Új szabadság létrehozása</h1>
-            <form name="myForm" method="post"  onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF']?>">
-                <p>Szabadság kezdete: <input type="date" name="startDate"> <br></p>
-                <p>Szabadság vége: <input type="date" name="endDate"> <br></p>
+            <h1 class="text-center fw-bold mb-5">Új szabadság létrehozása</h1>
+            <form name="myForm" method="post"  onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF']?>" class="d-flex justify-content-evenly">
+                <p>Szabadság kezdete: <input type="date" name="startDate"></p>
+                <p>Szabadság vége: <input type="date" name="endDate"></p>
                 <p><input type="submit" value="Küld"></p>
             </form>
 

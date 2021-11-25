@@ -19,6 +19,30 @@ require_once('Connect.php');
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="OOOstyle.css">
 </head>
+
+<script>
+            function ChooseConditionalBGColor(rowNumber){
+               
+                var containerName = "StatusTD" + rowNumber;
+                var hiddenContainerName = "status" + rowNumber;
+
+                var status = document.getElementById(hiddenContainerName).value;
+
+				if (status == 'Függőben')
+				{
+                    document.getElementById(containerName).className = "bg-warning";
+				}
+				else if (status == 'Elfogadva')
+                {
+                    document.getElementById(containerName).className = "bg-success";
+				}
+                else if (status == 'Elutasítva')
+                {
+                    document.getElementById(containerName).className = "bg-danger";
+                }
+            }
+    </script>
+
 <body class="bodyBackground fontFormat fw-bold">
 
 <div class="row d-flex justify-content-start fixed-top p-0 m-0">
@@ -79,8 +103,9 @@ require_once('Connect.php');
                         </td>
                     </tr>
                     <?php
-                    while ($row = mysqli_fetch_assoc($queryMyUpcomingRequests)) {
-
+                        $rowNumber = 0;
+                        
+                        while ($row = mysqli_fetch_assoc($queryMyUpcomingRequests)) {
                     ?>
 
                         <tr>
@@ -93,8 +118,9 @@ require_once('Connect.php');
                             <td>
                                 <?php echo ($row['EndDate']); ?>
                             </td>
-                            <td>
+                            <td id="<?php echo ("StatusTD$rowNumber");?>">
                                 <?php echo ($row['Status']); ?>
+                                <input type="hidden" id="<?php echo ('status'.$rowNumber)?>" value="<?php echo ($row['Status']); ?>">
                             </td>
                             <td>
                             <form method="post">
@@ -103,8 +129,10 @@ require_once('Connect.php');
                             </form>
                             </td>
                         </tr>
-                <?php
-                    }
+                    <?php
+                        echo ('<script type="text/javascript"> ChooseConditionalBGColor('.$rowNumber.'); </script>');
+                        $rowNumber = $rowNumber + 1;
+                        }
                 }
                 ?>
                 </table>

@@ -60,9 +60,9 @@
                     $sendMail = mail($user['EmailAdress'],"Out Of Office Request with starting Date".$startDate."was modified", "Dear ".$user['Name']."! \n\n Your Request status is modified to: ".$selectedStatus."! \n Log in to http://portalbce.hu/DF9YEV/OutOfOffice_HW/Login.php to see your Requests and their current states. \n\n This is an automated message sent by the server, please don't respond to this, contact the administrators instead.");
 
                     if( $sendMail == true ) {
-                        echo '<script>alert("Message was sent successfully...")</script>';
+                        echo '<script>alert("Message was sent successfully!")</script>';
                      }else {
-                        echo '<script>alert("Message could not be sent...")</script>';
+                        echo '<script>alert("Message could not be sent, there is probably no e-mail adress added to this user!")</script>';
                      }
                 }
             }
@@ -90,8 +90,7 @@
                     document.getElementById(containerName).className = "bg-danger";
                 }
             }
-
-        </script>
+    </script>
 
     <body class="bodyBackground fontFormat fw-bold">
     
@@ -148,7 +147,6 @@
 								<?php echo ($row['Status']); ?>
 
                                 <input type="hidden" id="<?php echo ('status'.$rowNumber)?>" value="<?php echo ($row['Status']); ?>">
-                                
 							</td>
                             <td>
                                 <form action="ChangeStatus.php" method="POST">
