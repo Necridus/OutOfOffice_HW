@@ -7,6 +7,10 @@ if (!$_SESSION['Loggedin']) {
     header("Location:Login.php");
     exit;
 }
+elseif ($_SESSION['IsAdmin']) {
+    header("Location:Login.php?noRights=true");
+    exit;
+}
 require_once('Connect.php');
 ?>
 <!DOCTYPE HTML>

@@ -58,6 +58,13 @@
                             }
                         }
                     ?>
+                    <?php
+                        if (isset($_GET["noRights"])) {
+                            if ($_GET["noRights"]) {
+                                echo "<h3 class='text-danger'>Ezen oldalt nincs joga használni!</h3>";
+                            }
+                        }
+                    ?>
             </div>
         </div>
 
