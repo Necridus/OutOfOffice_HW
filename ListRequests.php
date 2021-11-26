@@ -68,7 +68,7 @@ require_once('Connect.php');
                 //A függvény nem látja a globális változókat ($connection)
                 include('Connect.php');
                 $id = $_GET['requestToBeDeleted'];
-                $deleteQuery = "UPDATE Requests SET ValidTo = CURDATE() WHERE ID=$id";
+                $deleteQuery = "UPDATE Requests SET ValidTo = NOW() WHERE ID=$id";
                 if ($connection->query($deleteQuery) === TRUE) {
                     echo "<script>alert('Szabadság kérelem eltávolítva')</script>";
                   } else {
