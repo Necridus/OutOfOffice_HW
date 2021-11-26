@@ -81,8 +81,8 @@ require_once('Connect.php');
             }
           
             $username = $_SESSION['Username'];
-            $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= CURDATE() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
-            $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate < CURDATE() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
+            $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= NOW() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
+            $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate < NOW() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
 
             if (mysqli_num_rows($queryMyUpcomingRequests) != 0) {
             ?>
