@@ -68,11 +68,11 @@ require_once('Connect.php');
                 //A függvény nem látja a globális változókat ($connection)
                 include('Connect.php');
                 $id = $_GET['requestToBeDeleted'];
-                $deleteQuery = "DELETE FROM Requests WHERE ID=$id";
+                $deleteQuery = "UPDATE Requests SET ValidTo = CURDATE() WHERE ID=$id";
                 if ($connection->query($deleteQuery) === TRUE) {
                     echo "<script>alert('Szabadság kérelem eltávolítva')</script>";
                   } else {
-                    echo "<script>alert('Nem sikerült eltávolítani a szabadság kérelmet')</script>";
+                    echo "<script>alert('Nem sikerült eltávolítani a szabadság kérelmet: <?php echo $connection->error; ?>')</script>";
                   }
             }
           
@@ -81,8 +81,8 @@ require_once('Connect.php');
             }
           
             $username = $_SESSION['Username'];
-            $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= CURDATE() ORDER BY Requests.ID");
-            $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate < CURDATE() ORDER BY Requests.ID");
+            $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= CURDATE() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
+            $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate < CURDATE() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
 
             if (mysqli_num_rows($queryMyUpcomingRequests) != 0) {
             ?>
@@ -137,18 +137,23 @@ require_once('Connect.php');
                         echo ('<script type="text/javascript"> ChooseConditionalBGColor('.$rowNumber.'); </script>');
                         $rowNumber = $rowNumber + 1;
                         }
+                } else{
+                    ?>
+                    <h4>Nincs közelgő szabadságod</h4>
+                    <?php
                 }
                 ?>
                 </table>
         </div>
     </div>
 
-    <?php
-    if (mysqli_num_rows($queryMyUpcomingRequests) != 0) {
-        ?>
     <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-10">
         <h1 class="text-center fw-bold">Korábbi szabadságaim</h1>
+    <?php
+    if (mysqli_num_rows($queryMyPastRequests) != 0) {
+        ?>
+    
         <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
                     <tr class="thead-dark fw-bold text-uppercase">
                         <td>
@@ -187,6 +192,10 @@ require_once('Connect.php');
                         </tr>
                 <?php
                     }
+                } else {
+                    ?>
+                    <h4>Még nem voltak szabadságaid/szabadság kérelmeid</h4>
+                    <?php
                 }
                 ?>
                 </table>
