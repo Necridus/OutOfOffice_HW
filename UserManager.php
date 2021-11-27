@@ -37,8 +37,63 @@
         <div class="d-flex justify-content-center">
             <div class="commonContainer rounded col-10">
             <h1 class="text-center text-uppercase fw-bold">Felhasználók</h1>
+            <?php
+                   $queryAllUsers = mysqli_query($connection, "SELECT Users.Name, Users.UserName, JobTitles.JobTitle, Users.IsAdmin FROM Users 
+                   JOIN Requests ON Users.JobTitle_FK = JobTitles.ID");
+			?>
+            <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
+                <tr class="thead-dark fw-bold text-uppercase">
+                <td>Dolgozó</td>
+                <td>Felhasználónév</td>
+                <td>Pozíció</td>
+                <td>Admin</td>
+                <td colspan = "2"> </td>
+                    Műveletek
+                </tr>   
+                <?php
+                    $rowNumber = 0;
+					while($row = mysqli_fetch_assoc($queryAllUsers))
+					{
+				?>
+                <tr>
+					<td>
+                    <?php echo ($row['Name']); ?>
+					</td>
+					<td>
+					<?php echo ($row['UserName']); ?>
+					</td>
+					<td>
+					<?php echo ($row['JobTitle']); ?>
+					</td>
+                    <td>
+					<?php echo ($row['IsAdmin']); ?>
+					</td>
+                    <td>
+                        <form action="ModifyUser.php" method="POST">
+                            <input type="hidden" name="ID" value="<?php echo ($row['ID']); ?>">
+                            <input type="hidden" name="EmailAddress" value="<?php echo ($row['EmailAddress']); ?>">
+                            <input type="hidden" name="UserName" value="<?php echo ($row['UserName']); ?>">
+                            <input type="hidden" name="Password" value="<?php echo ($row['Password']); ?>">
+                            <input type="hidden" name="Name" value="<?php echo ($row['Name']);?>">
+                            <input type="hidden" name="JobTitle_FK" value="<?php echo ($row['JobTitle_FK']);?>">
+                            <input type="hidden" name="IsAdmin" value="<?php echo ($row['IsAdmin']);?>">
+                            <input type="hidden" name="ValidFrom" value="<?php echo ($row['ValidFrom']);?>">
+                            <input type="hidden" name="ValidTo" value="<?php echo ($row['ValidTo']);?>">
+
+                            <input type="submit" class="btn btn-link p-0 m-0" value="Módosítás">
+                        </form>
+                                
+					</td>
+            </table>
+
+
+        
+
             </div>
         </div>
+
+
+
 
         <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
                     <a href=Logout.php class="col-1 text-end btn btn-secondary fw-bold">
