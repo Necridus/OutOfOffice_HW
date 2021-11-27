@@ -36,19 +36,25 @@
 
         <div class="d-flex justify-content-center">
             <div class="commonContainer rounded col-10">
+            <?php  
+
+            $queryAllUsers = mysqli_query($connection, "SELECT Users.Name, Users.UserName, JobTitles.JobTitle, Users.IsAdmin FROM Users 
+            JOIN JobTitles ON Users.JobTitle_FK = JobTitles.ID WHERE Users.ValidTo IS NULL ORDER BY Users.Name");
+                       
+            if (mysqli_num_rows($queryAllUsers) != 0) 
+            {
+
+            ?>
             <h1 class="text-center text-uppercase fw-bold">Felhasználók</h1>
-            <?php
-                   $queryAllUsers = mysqli_query($connection, "SELECT Users.Name, Users.UserName, JobTitles.JobTitle, Users.IsAdmin FROM Users 
-                   JOIN Requests ON Users.JobTitle_FK = JobTitles.ID");
-			?>
             <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
                 <tr class="thead-dark fw-bold text-uppercase">
                 <td>Dolgozó</td>
                 <td>Felhasználónév</td>
                 <td>Pozíció</td>
                 <td>Admin</td>
-                <td colspan = "2"> </td>
+                <td colspan = "2"> 
                     Műveletek
+                </td>
                 </tr>   
                 <?php
                     $rowNumber = 0;
@@ -66,7 +72,16 @@
 					<?php echo ($row['JobTitle']); ?>
 					</td>
                     <td>
-					<?php echo ($row['IsAdmin']); ?>
+					<?php 
+                        if ($row['IsAdmin'] == 1)
+                        {
+                           echo 'Igen';
+                        }
+                        else
+                        {
+                            echo 'Nem';
+                        };
+                 ?>
 					</td>
                     <td>
                         <form action="ModifyUser.php" method="POST">
@@ -81,15 +96,34 @@
                             <input type="hidden" name="ValidTo" value="<?php echo ($row['ValidTo']);?>">
 
                             <input type="submit" class="btn btn-link p-0 m-0" value="Módosítás">
-                        </form>
+
+                        </form>                          
+					</td>
+                    <td>
+                    <form method="post">
+                        <!--Forrás: https://stackoverflow.com/questions/19323010/execute-php-function-with-onclick-->
+                        <a class="btn btn-link p-0 m-0" href='UserManager.php?requestToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
+                    </form>
                                 
 					</td>
+                    </tr>
+            <?php 
+
+               $rowNumber = $rowNumber + 1;
+                }
+            }
+            else
+            {
+            ?>
+
+            <h4>Nincs elérhető felhasználó az adatbázisban</h4>
+
+            <?php
+            }
+            ?>
             </table>
-
-
-        
-
-            </div>
+          
+        </div>
         </div>
 
 
@@ -108,3 +142,4 @@
 
     </body>
 </html>
+
