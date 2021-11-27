@@ -75,14 +75,11 @@ require_once('Connect.php');
         }
         //TO DO
         //Megvizsgálja, hogy az adott kezdő és befejező dátummal rendelkező szabadság átfedésben van-e egy másikkal
-        function hasOverlap($startDate, $endDate, $requests){
-            foreach ($requests as $start => $end) {
-                /*print("<pre>");
-                print_r($start);
-                print_r($end);
-                print("</pre>");
-                echo "<br>";*/
-                if($startDate <= $end && $endDate >= $start){
+        function hasOverlap($newStartDate, $newEndDate, $requests){
+            for($i=0;$i<count($requests);$i++){
+                $start = $requests[$i]['StartDate'];
+                $end = $requests[$i]['EndDate'];
+                if($newStartDate <= $end && $newEndDate >= $start){
                     return true;
                 }
             }
@@ -96,10 +93,10 @@ require_once('Connect.php');
             $userID = $connection->query("SELECT Users.ID FROM Users WHERE UserName = '$username'")->fetch_object()->ID;
             $result = mysqli_query($connection, "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','Függőben','$validFrom', NULL)");
             if($result)
-            {/*
+            {
                 ?><p><?php
                 echo hasOverlap($startDate, $endDate, getArray());
-                ?></p><?php*/
+                ?></p><?php
             }
             else
             {
