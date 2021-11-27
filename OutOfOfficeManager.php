@@ -61,7 +61,7 @@
                     $queryUserDetails = mysqli_query($connection,"SELECT * FROM Users WHERE ID = '$userID'");
                     $user = mysqli_fetch_assoc($queryUserDetails);
                     
-                    $sendMail = mail($user['EmailAdress'],"Out Of Office Request with starting Date".$startDate."was modified", "Dear ".$user['Name']."! \n\n Your Request status is modified to: ".$selectedStatus."! \n Log in to http://portalbce.hu/DF9YEV/OutOfOffice_HW/Login.php to see your Requests and their current states. \n\n This is an automated message sent by the server, please don't respond to this, contact the administrators instead.");
+                    $sendMail = mail($user['EmailAdress'],"Out Of Office Request with starting Date ".$startDate." was modified", "Dear ".$user['Name']."! \n\n Your Request status is modified to: ".$selectedStatus."! \n Log in to http://portalbce.hu/DF9YEV/OutOfOffice_HW/Login.php to see your Requests and their current states. \n\n This is an automated message sent by the server, please don't respond to this, contact the administrators instead.");
 
                     if( $sendMail == true ) {
                         echo '<script>alert("Message was sent successfully!")</script>';
