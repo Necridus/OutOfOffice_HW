@@ -37,9 +37,39 @@
         <div class="d-flex justify-content-center">
             <div class="commonContainer rounded col-10">
             <?php  
+            function deleteuser() 
+            {
+                //A függvény nem látja a globális változókat ($connection)
 
-            $queryAllUsers = mysqli_query($connection, "SELECT Users.Name, Users.UserName, JobTitles.JobTitle, Users.IsAdmin FROM Users 
-            JOIN JobTitles ON Users.JobTitle_FK = JobTitles.ID WHERE Users.ValidTo IS NULL ORDER BY Users.Name");
+                include('Connect.php');
+
+                $id = $_GET['UserToBeDeleted'];
+                $deleteRequestsQuery = "UPDATE Requests SET Validto = NOW() WHERE USERID=$id";
+                
+                if ($connection->query($deleteRequestsQuery) === TRUE) 
+                {
+                    $deleteUserQuery = "UPDATE Users SET ValidTo = NOW() WHERE ID=$id";                                  
+                    if ($connection->query($deleteUserQuery) === TRUE)
+                    {
+                    echo "<script>alert('A felhasználó az adatbázisból eltávolításra került')</script>";
+                    } 
+                    else 
+                    {
+                    echo "<script>alert('Nem sikerült eltávolítani a felhasználót: <?php echo $connection->error; ?>')</script>";
+                    }
+                }
+                else
+                {
+                    echo "<script>alert('Nem sikerült eltávolítani a felhasználót: <?php echo $connection->error; ?>')</script>";
+                }
+            }
+            if (isset($_GET['UserToBeDeleted'])) 
+            {
+              deleteuser();
+            }
+
+            $queryAllUsers = mysqli_query($connection, "SELECT Users.ID, Users.Name, Users.UserName, Users.EmailAddress, JobTitles.JobTitle, Users.ValidFrom, Users.ValidTo, Users.IsAdmin FROM Users 
+            JOIN JobTitles ON Users.JobTitle_FK = JobTitles.ID ORDER BY Users.Name");
                        
             if (mysqli_num_rows($queryAllUsers) != 0) 
             {
@@ -47,17 +77,20 @@
             ?>
             <h1 class="text-center text-uppercase fw-bold">Felhasználók</h1>
             <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
-                <tr class="thead-dark fw-bold text-uppercase">
+            <tr> <a href='CreateUser.php'>Új felhasználó hozzáadása</a></tr>
+                <tr class="thead-dark fw-bold text-uppercase">               
                 <td>Dolgozó</td>
                 <td>Felhasználónév</td>
+                <td>Email</td>
                 <td>Pozíció</td>
                 <td>Admin</td>
+                <td>Érvényesség kezdete</td>               
                 <td colspan = "2"> 
                     Műveletek
                 </td>
                 </tr>   
                 <?php
-                    $rowNumber = 0;
+                    $rowNumber = 1;
 					while($row = mysqli_fetch_assoc($queryAllUsers))
 					{
 				?>
@@ -68,11 +101,14 @@
 					<td>
 					<?php echo ($row['UserName']); ?>
 					</td>
+                    <td>
+					<?php echo ($row['EmailAddress']); ?>
+					</td>
 					<td>
 					<?php echo ($row['JobTitle']); ?>
 					</td>
                     <td>
-					<?php 
+                    <?php 
                         if ($row['IsAdmin'] == 1)
                         {
                            echo 'Igen';
@@ -82,7 +118,11 @@
                             echo 'Nem';
                         };
                  ?>
+                 </td>
+                    <td>
+					<?php echo ($row['ValidFrom']); ?>
 					</td>
+ 					
                     <td>
                         <form action="ModifyUser.php" method="POST">
                             <input type="hidden" name="ID" value="<?php echo ($row['ID']); ?>">
@@ -90,7 +130,7 @@
                             <input type="hidden" name="UserName" value="<?php echo ($row['UserName']); ?>">
                             <input type="hidden" name="Password" value="<?php echo ($row['Password']); ?>">
                             <input type="hidden" name="Name" value="<?php echo ($row['Name']);?>">
-                            <input type="hidden" name="JobTitle_FK" value="<?php echo ($row['JobTitle_FK']);?>">
+                            <input type="hidden" name="JobTitle_FK" value="<?php echo ($row['JobTitle']);?>">
                             <input type="hidden" name="IsAdmin" value="<?php echo ($row['IsAdmin']);?>">
                             <input type="hidden" name="ValidFrom" value="<?php echo ($row['ValidFrom']);?>">
                             <input type="hidden" name="ValidTo" value="<?php echo ($row['ValidTo']);?>">
@@ -102,7 +142,7 @@
                     <td>
                     <form method="post">
                         <!--Forrás: https://stackoverflow.com/questions/19323010/execute-php-function-with-onclick-->
-                        <a class="btn btn-link p-0 m-0" href='UserManager.php?requestToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
+                        <a class="btn btn-link p-0 m-0" href='UserManager.php?UserToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
                     </form>
                                 
 					</td>
