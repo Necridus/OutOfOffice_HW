@@ -69,7 +69,7 @@
             }
 
             $queryAllUsers = mysqli_query($connection, "SELECT Users.ID, Users.Name, Users.UserName, Users.EmailAddress, JobTitles.JobTitle, Users.ValidFrom, Users.ValidTo, Users.IsAdmin FROM Users 
-            JOIN JobTitles ON Users.JobTitle_FK = JobTitles.ID ORDER BY Users.Name");
+            JOIN JobTitles ON Users.JobTitle_FK = JobTitles.ID WHERE Users.ValidTo IS NULL ORDER BY Users.Name");
                        
             if (mysqli_num_rows($queryAllUsers) != 0) 
             {
