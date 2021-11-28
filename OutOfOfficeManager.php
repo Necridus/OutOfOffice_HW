@@ -37,7 +37,7 @@ if (isset($_POST['submitChange'])) {
 
     $selectedStatus = $_POST['selectedStatus'];
 
-    $queryRequest = mysqli_query($connection, "SELECT * FROM Requests WHERE ID = '$ID'");
+    $queryRequest = mysqli_query($connection, "SELECT * FROM Requests WHERE ID = '$ID' AND ValidTo IS NULL");
     $request = mysqli_fetch_assoc($queryRequest);
 
     if (mysqli_num_rows($queryRequest) != 0) {
@@ -54,7 +54,7 @@ if (isset($_POST['submitChange'])) {
                 die(mysqli_error($connection));
             }
 
-            $queryUserDetails = mysqli_query($connection, "SELECT * FROM Users WHERE ID = '$userID'");
+            $queryUserDetails = mysqli_query($connection, "SELECT * FROM Users WHERE ID = '$userID' AND ValidTo IS NULL");
             $user = mysqli_fetch_assoc($queryUserDetails);
 
             $sendMail = mail($user['EmailAddress'], "Out Of Office Request with starting Date " . $startDate . " was modified", "Dear " . $user['Name'] . "! \n\n Your Request status is modified to: " . $selectedStatus . "! \n Log in to http://portalbce.hu/DF9YEV/OutOfOffice_HW/Login.php to see your Requests and their current states. \n\n This is an automated message sent by the server, please don't respond to this, contact the administrators instead.");
@@ -62,7 +62,7 @@ if (isset($_POST['submitChange'])) {
             if ($sendMail == true) {
                 echo '<script>alert("Message was sent successfully!")</script>';
             } else {
-                echo '<script>alert("Message could not be sent, there is probably no e-mail adress added to this user!")</script>';
+                echo '<script>alert("Message could not be sent, there is probably no e-mail address added to this user!")</script>';
             }
         }
     }
@@ -103,9 +103,12 @@ if (isset($_POST['submitChange'])) {
                 Benyújtott szabadságkérések
             </h1>
 
+            <h2 class="text-center fw-bold mt-4 mb-4">
+                Jövőbeli szabadságkérések
+            </h2>
             <?php
             $queryAllRequests = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests 
-                    JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL ORDER BY Requests.StartDate");
+                    JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL AND Requests.StartDate >= NOW() ORDER BY Requests.StartDate");
             ?>
 
             <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
@@ -154,6 +157,58 @@ if (isset($_POST['submitChange'])) {
                                 <input type="submit" class="btn btn-link p-0 m-0" value="Módosítás">
                             </form>
 
+                        </td>
+                    </tr>
+
+                <?php
+                    echo ('<script type="text/javascript"> ChooseConditionalBGColor(' . $rowNumber . '); </script>');
+                    $rowNumber = $rowNumber + 1;
+                }
+                ?>
+            </table>
+
+            <h2 class="text-center fw-bold mt-4 mb-4">
+                Korábbi szabadságkérések
+            </h2>
+
+            <?php
+            $queryAllRequests = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests 
+                    JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL AND Requests.StartDate < NOW() ORDER BY Requests.StartDate");
+            ?>
+
+            <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
+                <tr class="thead-dark fw-bold text-uppercase">
+                    <td>
+                        Dolgozó
+                    </td>
+                    <td>
+                        Szabadság kezdete
+                    </td>
+                    <td>
+                        Szabadság vége
+                    </td>
+                    <td>
+                        Állapot
+                    </td>
+                </tr>
+
+                <?php
+                while ($row = mysqli_fetch_assoc($queryAllRequests)) {
+                ?>
+                    <tr>
+                        <td>
+                            <?php echo ($row['Name']); ?>
+                        </td>
+                        <td>
+                            <?php echo ($row['StartDate']); ?>
+                        </td>
+                        <td>
+                            <?php echo ($row['EndDate']); ?>
+                        </td>
+                        <td id="<?php echo ("StatusTD$rowNumber"); ?>">
+                            <?php echo ($row['Status']); ?>
+
+                            <input type="hidden" id="<?php echo ('status' . $rowNumber) ?>" value="<?php echo ($row['Status']); ?>">
                         </td>
                     </tr>
 
