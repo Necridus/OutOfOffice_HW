@@ -26,6 +26,38 @@ require_once('Connect.php');
         let emailcim = document.forms["ModForm"]["newemail"].value;
         if (nev == "" || felhasznalo == "" || emailcim == "") {
             alert("Minden adatot meg kell adni!");
+            return false;        
+        }
+    
+        }   
+    </script>
+<?php
+        
+        function UserExists($selectedname)       
+        {   
+        include('Connect.php');
+        $queryUsers = mysqli_query($connection,"SELECT UserName FROM Users WHERE ValidTo IS NULL");
+        $users = [];
+                if (mysqli_num_rows($queryUsers) > 0) {
+                    while ($row = mysqli_fetch_assoc($queryUsers)) {
+                        array_push($users, $row);
+                    }
+                }
+                return $users;
+        for ($i = 0; $i < count($users); $i++) 
+        {
+            if ($users[$i]['UserName'] == $selectedname)
+            {
+                return true;
+            }
+            else
+            { 
+                return false;
+            }
+        }
+
+        }
+    
             return false;
         }
 
@@ -127,6 +159,28 @@ function UserExists($selectedname)
         </div>
     </div>
 
+        
+        <?php 
+        $username2 = $_POST['newusername'];
+        $name2 = $_POST['newname'];
+        $email2 = $_POST['newemail'];
+        $jobtitle2 = $_POST['newjobtitle'];
+        $admin2 = $_POST['newisadmin'];
+        $userID = $_POST['ID'];
+        
+        
+        
+        if (!empty($_POST)) 
+        { 
+            if (!UserExists($username2))
+            {
+
+            }
+            else 
+            {
+                echo "<script>alert('Ez a felhasználónév már létezik')</script>";
+                
+            }
 
     <?php
     $username2 = $_POST['newusername'];
@@ -141,6 +195,7 @@ function UserExists($selectedname)
         } else {
             echo "<script>alert('Ez a felhasználónév már létezik')</script>";
         }
+        
     }
 
 

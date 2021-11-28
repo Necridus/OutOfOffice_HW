@@ -35,6 +35,34 @@ require_once('Connect.php');
         </a>
     </div>
 
+    <div class="d-flex justify-content-center">
+        <div class="commonContainer rounded col-10">
+            <h1 class="text-center fw-bold mb-5">Új felhasználó hozzáadása</h1>
+            <form name="MyForm" method="post" onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF'] ?>" class="d-flex justify-content-evenly">
+                <p>Azonosító: </p><input type="number" name="az" placeholder="Azonosító"></p>
+                <p>Email cím: <input type="text" name="emailcim" placeholder="Email cím"></p>
+                <p>Felhasználónév: <input type="text" name="username" placeholder="Felhasználónév"></p>
+                <p>Jelszó <input type="text" name="dolgozo" placeholder="Jelszó"></p>
+                <p>Dolgozó neve: <input type="text" name="dolgozo" placeholder="Név"></p>
+                <p>Jelszó: <input type="password" name="password" placeholder="Jelszó">
+                <p>Pozíció: <select class="custom-select p-0" name="job">
+                    <option value="1">Csoportvezető</option>
+                    <option value="2">Scrum Master</option>
+                    <option value="3">Fejlesztő</option>
+                    <option value="4">Product Owner</option>
+                    <option value="5">Tesztelő</option>
+                    <option value="6">Business Analyst</option>
+                </select>
+            </p>
+
+                <input type="submit" value="Hozzáadás"></p>
+            </form>
+
+
+</div>
+</div>
+
+    
 
 
 
