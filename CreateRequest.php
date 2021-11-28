@@ -59,20 +59,22 @@ require_once('Connect.php');
             </form>
 
             <?php
-            function getAdmins() {
+            function getAdmins()
+            {
                 include('Connect.php');
-                return mysqli_query($connection,"SELECT Users.EmailAddress, Users.UserName FROM Users WHERE isAdmin = 1");
+                return mysqli_query($connection, "SELECT Users.EmailAddress, Users.UserName FROM Users WHERE isAdmin = 1");
             }
-            
-            function sendMailAboutNewRequest($adminEmails, $startDate, $endDate, $username){
+
+            function sendMailAboutNewRequest($adminEmails, $startDate, $endDate, $username)
+            {
                 while ($row = mysqli_fetch_assoc($adminEmails)) {
-                    $sendMail = mail($row['EmailAddress'],"New Request has been created", "Dear ".$row['UserName']."! \n\n New Out Of Office Request has been created by ".$username." from ".$startDate." to ".$endDate."! \n Log in to http://portalbce.hu/DF9YEV/OutOfOffice_HW/Login.php to see the Request. \n\n This is an automated message sent by the server, please don't respond to this.");
+                    $sendMail = mail($row['EmailAddress'], "New Request has been created", "Dear " . $row['UserName'] . "! \n\n New Out Of Office Request has been created by " . $username . " from " . $startDate . " to " . $endDate . "! \n Log in to http://portalbce.hu/DF9YEV/OutOfOffice_HW/Login.php to see the Request. \n\n This is an automated message sent by the server, please don't respond to this.");
                 }
-                if( $sendMail == true ) {
+                if ($sendMail == true) {
                     echo '<script>alert("Message was sent successfully!")</script>';
-                 }else {
+                } else {
                     echo '<script>alert("Message could not be sent, there is probably no e-mail adress added to this user!")</script>';
-                 }
+                }
             }
 
             $username = $_SESSION['Username'];
@@ -123,7 +125,7 @@ require_once('Connect.php');
                     } else {
                         echo "<script>alert('Nem sikerült továbbítani a kérést az adatbázis számára')</script>";
                     }
-                } else{
+                } else {
                     echo "<script>alert('Ez a szabadság átfedésben van egy másikkal')</script>";
                 }
             }
