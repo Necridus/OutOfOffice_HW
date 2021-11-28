@@ -35,9 +35,8 @@
     </script>
 <?php
         
-        function UserExists($selectedname)
-        
-    {
+        function UserExists($selectedname)       
+        {   
         include('Connect.php');
         $queryUsers = mysqli_query($connection,"SELECT UserName FROM Users WHERE ValidTo IS NULL");
         $users = [];
@@ -59,7 +58,7 @@
             }
         }
 
-    }
+        }
     
 ?>
     <body class="bodyBackground fontFormat fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -142,6 +141,8 @@
         $admin2 = $_POST['newisadmin'];
         $userID = $_POST['ID'];
         
+        
+        
         if (!empty($_POST)) 
         { 
             if (!UserExists($username2))
@@ -151,9 +152,11 @@
             else 
             {
                 echo "<script>alert('Ez a felhasználónév már létezik')</script>";
+                
             }
 
         }
+        
 
         
         ?>
