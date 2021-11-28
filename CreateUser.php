@@ -40,17 +40,33 @@ require_once('Connect.php');
     
     ?>
 
-    <div class="d-flex justify-content-center">
-        <div class="commonContainer rounded col-10">
+<div class="d-flex justify-content-center">
+        <div class="commonContainer rounded col-8">
+            <div class="row m-0 p-0">
             <h1 class="text-center fw-bold mb-5">Új felhasználó hozzáadása</h1>
             <form name="MyForm" method="post" onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF'] ?>" class="d-flex justify-content-evenly">
-                <p>Azonosító: </p><input type="number" name="az" placeholder="Azonosító"></p>               
-                <p>Email cím: <input type="text" name="emailcim" placeholder="Email cím"></p>
-                <p>Felhasználónév: <input type="text" name="username" placeholder="Felhasználónév"></p>
-                <p>Jelszó <input type="text" name="dolgozo" placeholder="Jelszó"></p>
-                <p>Dolgozó neve: <input type="text" name="dolgozo" placeholder="Név"></p>
-                <p>Jelszó: <input type="password" name="password" placeholder="Jelszó">
-                <p>Pozíció: <select class="custom-select p-0" name="job">
+            <table class="col-8 table table-striped table-bordered table-hover text-center align-middle">
+            <tr>
+            <td>Email cím: </td>
+            <td><input type="email" name="emailcim" placeholder="Email cím"></td>
+            </tr>
+            <tr>
+            <td>Felhasználónév: </td>
+            <td><input type="text" name="username" placeholder="Felhasználónév"></td>
+            </tr>
+            <tr>
+            <td>Jelszó: </td>
+            <td><input type="password" name="jelszo" placeholder="Jelszó"></td>
+            </tr>           
+            <tr>
+            <td>Dolgozó neve: </td>
+            <td><input type="text" name="dolgozo" placeholder="Dolgozó neve"></td>
+            
+            </tr>
+            <tr>
+            <td>Pozíció: </td>
+            <td>
+                <select class="custom-select p-0" name="job">
                     <option value="1">Csoportvezető</option>
                     <option value="2">Scrum Master</option>
                     <option value="3">Fejlesztő</option>
@@ -58,18 +74,45 @@ require_once('Connect.php');
                     <option value="5">Tesztelő</option>
                     <option value="6">Business Analyst</option>
                 </select>
-            </p>
-
-                <input type="submit" value="Hozzáadás"></p>
+            </td>        
+            </tr>
+            <tr>
+            <td>Admin jogosultság: </td>
+            <td>
+                <select class="custom-select p-0" name="isadmin">
+                    <option value="1">Igen</option>
+                    <option value="0">Nem</option>
+                </select>
+            </td>
+            
+            </tr>
+            </table>
+               
+            <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" name="AddUser" value="Hozzáadás"> 
+            </div>
             </form>
-
-
+            </div>
+        </div>
 </div>
-</div>
-
-    
 
 
+            <p>Email cím: <input type="email" name="emailcim" placeholder="Email cím"></p>
+                <p>Felhasználónév: <input type="text" name="username" placeholder="Felhasználónév"></p>
+                <p>Jelszó: <input type="jelszo" name="jelszo" placeholder="Jelszó"></p><br>
+                <p>Dolgozó neve: <input type="text" name="dolgozo" placeholder="Név"></p>               
+                <p>Pozíció: <select class="custom-select p-0" name="job">
+                    <option value="1">Csoportvezető</option>
+                    <option value="2">Scrum Master</option>
+                    <option value="3">Fejlesztő</option>
+                    <option value="4">Product Owner</option>
+                    <option value="5">Tesztelő</option>
+                    <option value="6">Business Analyst</option>
+                </select></p>
+                <p>Admin jogosultság: <select class="custom-select p-0" name="isadmin">
+                    <option value="1">Igen</option>
+                    <option value="0">Nem</option>
+                </select></p>
 
     <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
         <a href=Logout.php class="col-1 text-end btn btn-secondary fw-bold">
