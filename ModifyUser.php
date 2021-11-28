@@ -45,7 +45,8 @@ require_once('Connect.php');
         if (isset($_POST['submitUser']))
         
         {
-        $queryUsers = mysqli_query($connection,"SELECT UserName FROM Users WHERE ValidTo IS NULL");
+        $currentuserID = $_POST['ID'];
+        $queryUsers = mysqli_query($connection,"SELECT UserName FROM Users WHERE ValidTo IS NULL AND ID IS NOT '" . $currentuserID . "'");
         $users = [];
                 if (mysqli_num_rows($queryUsers) > 0) 
                 {
@@ -60,6 +61,7 @@ require_once('Connect.php');
             if ($users[$i]['UserName'] == $selectedname)
             {
                 return true;
+                
             }
             
         
@@ -133,6 +135,7 @@ require_once('Connect.php');
                                     </select>
                                 </td>
                                 <input type="hidden" name="ID" value="<?php echo $_POST['ID']; ?>">
+                                <input type="hidden" name="password" value="<?php echo $_POST['Password']; ?>">
                         </tr>
                         
                     </table>
@@ -151,13 +154,44 @@ require_once('Connect.php');
         $email2 = $_POST['newemail'];
         $jobtitle2 = $_POST['newjobtitle'];
         $admin2 = $_POST['newisadmin'];
+
         $userID = $_POST['ID'];
+        $password = $_POST['Password'];
+
+        $validTo = date("Y-m-d H:i:s");
+        $validFrom = date("Y-m-d H:i:s");
+
+        
         
         if (!empty($_POST)) 
         { 
             if (!UserExists($username2))
             {
-                
+                $queryModify = mysqli_query($connection, "SELECT * FROM Requests WHERE ID = '$userID' AND ValidTo IS NULL");
+                $modify = mysqli_fetch_assoc($queryModify);
+                if (mysqli_num_rows($queryModify) != 0) 
+                {
+        
+                        $setValidTo = "UPDATE Users set ValidTo = '$validTo' WHERE ID = '$userID'";
+            
+                        if (!mysqli_query($connection, $setValidTo)) {
+                            die(mysqli_error($connection));
+                        }
+            
+                        $insertIntoUsers = "INSERT INTO Users (ID, EmailAddress, UserName, Password, Name, JobTitle_FK, IsAdmin, ValidFrom, ValidTo) 
+                                            VALUES ('$userID','$email2','$username2','$password','$newname', '$jobtitle2', '$admin2', '$validFrom', NULL)";
+            
+                        if (!mysqli_query($connection, $insertIntoRequests)) {
+                            die(mysqli_error($connection));
+                        }
+
+                        if ($insertIntoUsers) {
+                            echo "<script>alert('Felhasználó módosítva')</script>";
+                        }
+                        else
+                        {
+                            echo "<script>alert('Nem sikerült módosítani')</script>";
+                        }
             }
             else 
             {
@@ -165,6 +199,7 @@ require_once('Connect.php');
                 
             }
         }
+    }
    
     
     ?>
