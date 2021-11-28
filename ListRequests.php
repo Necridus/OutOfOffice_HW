@@ -6,8 +6,7 @@ session_start();
 if (!$_SESSION['Loggedin']) {
     header("Location:Login.php");
     exit;
-}
-elseif ($_SESSION['IsAdmin']) {
+} elseif ($_SESSION['IsAdmin']) {
     header("Location:Login.php?noRights=true");
     exit;
 }
@@ -25,61 +24,57 @@ require_once('Connect.php');
 </head>
 
 <script>
-            function ChooseConditionalBGColor(rowNumber){
-               
-                var containerName = "StatusTD" + rowNumber;
-                var hiddenContainerName = "status" + rowNumber;
+    function ChooseConditionalBGColor(rowNumber) {
 
-                var status = document.getElementById(hiddenContainerName).value;
+        var containerName = "StatusTD" + rowNumber;
+        var hiddenContainerName = "status" + rowNumber;
 
-				if (status == 'Függőben')
-				{
-                    document.getElementById(containerName).className = "bg-warning";
-				}
-				else if (status == 'Elfogadva')
-                {
-                    document.getElementById(containerName).className = "bg-success";
-				}
-                else if (status == 'Elutasítva')
-                {
-                    document.getElementById(containerName).className = "bg-danger";
-                }
-            }
-    </script>
+        var status = document.getElementById(hiddenContainerName).value;
+
+        if (status == 'Függőben') {
+            document.getElementById(containerName).className = "bg-warning";
+        } else if (status == 'Elfogadva') {
+            document.getElementById(containerName).className = "bg-success";
+        } else if (status == 'Elutasítva') {
+            document.getElementById(containerName).className = "bg-danger";
+        }
+    }
+</script>
 
 <body class="bodyBackground fontFormat fw-bold">
 
-<div class="row d-flex justify-content-start fixed-top p-0 m-0">
-                <a href=MainUserPage.php class="col-1 text-center btn btn-secondary fw-bold">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"></path>
-                    </svg>
-                    Vissza
-                </a>
-        </div>
+    <div class="row d-flex justify-content-start fixed-top p-0 m-0">
+        <a href=MainUserPage.php class="col-1 text-center btn btn-secondary fw-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"></path>
+            </svg>
+            Vissza
+        </a>
+    </div>
 
     <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-10">
             <h2 class="text-secondary fw-bold">Hello, <?php echo $_SESSION['Username'] ?>!</h2>
 
             <?php
-            
-            function deleteRequest() {
+
+            function deleteRequest()
+            {
                 //A függvény nem látja a globális változókat ($connection)
                 include('Connect.php');
                 $id = $_GET['requestToBeDeleted'];
                 $deleteQuery = "UPDATE Requests SET ValidTo = NOW() WHERE ID=$id";
                 if ($connection->query($deleteQuery) === TRUE) {
                     echo "<script>alert('Szabadság kérelem eltávolítva')</script>";
-                  } else {
+                } else {
                     echo "<script>alert('Nem sikerült eltávolítani a szabadság kérelmet: <?php echo $connection->error; ?>')</script>";
-                  }
+                }
             }
-          
+
             if (isset($_GET['requestToBeDeleted'])) {
-              deleteRequest();
+                deleteRequest();
             }
-          
+
             $username = $_SESSION['Username'];
             $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= NOW() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
             $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate < NOW() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
@@ -107,9 +102,9 @@ require_once('Connect.php');
                         </td>
                     </tr>
                     <?php
-                        $rowNumber = 0;
-                        
-                        while ($row = mysqli_fetch_assoc($queryMyUpcomingRequests)) {
+                    $rowNumber = 0;
+
+                    while ($row = mysqli_fetch_assoc($queryMyUpcomingRequests)) {
                     ?>
 
                         <tr>
@@ -122,25 +117,25 @@ require_once('Connect.php');
                             <td>
                                 <?php echo ($row['EndDate']); ?>
                             </td>
-                            <td id="<?php echo ("StatusTD$rowNumber");?>">
+                            <td id="<?php echo ("StatusTD$rowNumber"); ?>">
                                 <?php echo ($row['Status']); ?>
-                                <input type="hidden" id="<?php echo ('status'.$rowNumber)?>" value="<?php echo ($row['Status']); ?>">
+                                <input type="hidden" id="<?php echo ('status' . $rowNumber) ?>" value="<?php echo ($row['Status']); ?>">
                             </td>
                             <td>
-                            <form method="post">
-                                <!--Forrás: https://stackoverflow.com/questions/19323010/execute-php-function-with-onclick-->
-                                <a class="btn btn-link p-0 m-0" href='ListRequests.php?requestToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
-                            </form>
+                                <form method="post">
+                                    <!--Forrás: https://stackoverflow.com/questions/19323010/execute-php-function-with-onclick-->
+                                    <a class="btn btn-link p-0 m-0" href='ListRequests.php?requestToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
+                                </form>
                             </td>
                         </tr>
                     <?php
-                        echo ('<script type="text/javascript"> ChooseConditionalBGColor('.$rowNumber.'); </script>');
+                        echo ('<script type="text/javascript"> ChooseConditionalBGColor(' . $rowNumber . '); </script>');
                         $rowNumber = $rowNumber + 1;
-                        }
-                } else{
+                    }
+                } else {
                     ?>
                     <h4>Nincs közelgő szabadságod</h4>
-                    <?php
+                <?php
                 }
                 ?>
                 </table>
@@ -149,12 +144,12 @@ require_once('Connect.php');
 
     <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-10">
-        <h1 class="text-center fw-bold">Korábbi szabadságaim</h1>
-    <?php
-    if (mysqli_num_rows($queryMyPastRequests) != 0) {
-        ?>
-    
-        <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
+            <h1 class="text-center fw-bold">Korábbi szabadságaim</h1>
+            <?php
+            if (mysqli_num_rows($queryMyPastRequests) != 0) {
+            ?>
+
+                <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
                     <tr class="thead-dark fw-bold text-uppercase">
                         <td>
                             Létrehozás dátuma
@@ -190,17 +185,17 @@ require_once('Connect.php');
                             </td>
 
                         </tr>
-                <?php
+                    <?php
                     }
                 } else {
                     ?>
                     <h4>Még nem voltak szabadságaid/szabadság kérelmeid</h4>
-                    <?php
+                <?php
                 }
                 ?>
                 </table>
         </div>
-        </div>
+    </div>
 
     <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
         <a href=Logout.php class="col-1 text-end btn btn-secondary fw-bold">

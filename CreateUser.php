@@ -65,6 +65,7 @@ require_once('Connect.php');
     
 
 
+
     <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
         <a href=Logout.php class="col-1 text-end btn btn-secondary fw-bold">
             Kijelentkezés
