@@ -77,8 +77,8 @@ require_once('Connect.php');
             }
 
             $username = $_SESSION['Username'];
-            $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= NOW() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
-            $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate < NOW() AND Requests.ValidTo IS NULL ORDER BY Requests.ID");
+            $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= NOW() AND Requests.ValidTo IS NULL AND Users.ValidTo IS NULL ORDER BY Requests.ID");
+            $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate < NOW() AND Requests.ValidTo IS NULL AND Users.ValidTo IS NULL ORDER BY Requests.ID");
 
             if (mysqli_num_rows($queryMyUpcomingRequests) != 0) {
             ?>
@@ -125,7 +125,7 @@ require_once('Connect.php');
                             <td>
                                 <form method="post">
                                     <!--Forrás: https://stackoverflow.com/questions/19323010/execute-php-function-with-onclick-->
-                                    <a class="btn btn-link p-0 m-0" href='ListRequests.php?requestToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
+                                    <a  onclick="return confirm('Biztosan törölni szeretnéd ezt az elemet?');" class="btn btn-link p-0 m-0" href='ListRequests.php?requestToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
                                 </form>
                             </td>
                         </tr>
