@@ -6,7 +6,7 @@ session_start();
 if (!$_SESSION['Loggedin']) {
     header("Location:Login.php");
     exit;
-} elseif ($_SESSION['!IsAdmin']) {
+} elseif (!$_SESSION['IsAdmin']) {
     header("Location:Login.php?noRights=true");
     exit;
 }
