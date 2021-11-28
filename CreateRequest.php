@@ -27,12 +27,19 @@ require_once('Connect.php');
     function validateForm() {
         let startDate = document.forms["myForm"]["startDate"].value;
         let endDate = document.forms["myForm"]["endDate"].value;
+        var today = new Date().toISOString().substr(0, 10);
         if (startDate == "" || endDate == "") {
             alert("A dátumokat ki kell tölteni");
             return false;
-        } else if (startDate > endDate) {
-            alert("Start date must be earlier than end date");
-            return false;
+        } else {
+            if (startDate > endDate) {
+                alert("A kező dátumnak korábban kell lennie mint a befejező dátumnak");
+                return false;
+            }
+            if (startDate < today || endDate < today){
+                alert("A kiválasztott dátumoknak később kell lenniük mint a jelenlegi dátum");
+                return false;
+            }
         }
     }
 </script>
@@ -101,10 +108,6 @@ require_once('Connect.php');
                 for ($i = 0; $i < count($requests); $i++) {
                     $start = $requests[$i]['StartDate'];
                     $end = $requests[$i]['EndDate'];
-                    //print("A megadott kezdődátum: ".$newStartDate.", a megadott végdátum: ".$newEndDate."<br>");
-                    //print("A vizsgált kezdődátum: ".$start.", a vizsgált végdátum: ".$end."<br>");
-                    //print("Átfedés: ");
-                    //print((($newStartDate <= $end && $newEndDate >= $start)? "van" : "nincs"));
                     if ($newStartDate <= $end && $newEndDate >= $start) {
                         return true;
                     }
