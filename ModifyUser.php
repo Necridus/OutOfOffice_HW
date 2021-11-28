@@ -3,10 +3,12 @@ ob_start();
 header("Content-type: text/html; charset=utf-8");
 
 session_start();
-if (!$_SESSION['Loggedin']) {
+if (!$_SESSION['Loggedin']) 
+{
     header("Location:Login.php");
     exit;
 }
+
 require_once('Connect.php');
 ?>
 <!DOCTYPE HTML>
@@ -20,77 +22,61 @@ require_once('Connect.php');
     <link rel="stylesheet" href="OOOstyle.css">
 </head>
 <script>
-    function validateForm() {
+    function validateForm() 
+    {
         let nev = document.forms["ModForm"]["newname"].value;
         let felhasznalo = document.forms["ModForm"]["newusername"].value;
         let emailcim = document.forms["ModForm"]["newemail"].value;
-        if (nev == "" || felhasznalo == "" || emailcim == "") {
+        if (nev == "" || felhasznalo == "" || emailcim == "") 
+        {
             alert("Minden adatot meg kell adni!");
             return false;        
         }
-    
-        }   
-    </script>
-<?php
-        
+        else
+        {
+            return true;
+        }
+    }   
+</script>
+<?php      
         function UserExists($selectedname)       
         {   
         include('Connect.php');
+        if (isset($_POST['submitUser']))
+        
+        {
         $queryUsers = mysqli_query($connection,"SELECT UserName FROM Users WHERE ValidTo IS NULL");
         $users = [];
-                if (mysqli_num_rows($queryUsers) > 0) {
-                    while ($row = mysqli_fetch_assoc($queryUsers)) {
+                if (mysqli_num_rows($queryUsers) > 0) 
+                {
+                    while ($row = mysqli_fetch_assoc($queryUsers)) 
+                    {
                         array_push($users, $row);
                     }
                 }
-                return $users;
+                
         for ($i = 0; $i < count($users); $i++) 
         {
             if ($users[$i]['UserName'] == $selectedname)
             {
                 return true;
             }
-            else
-            { 
-                return false;
-            }
+            
+        
         }
 
+        return false;
         }
-    
+        else
+        {
             return false;
+        }   
         }
 
-    }
-</script>
-<?php
-
-function UserExists($selectedname)
-
-{
-    include('Connect.php');
-    $queryUsers = mysqli_query($connection, "SELECT UserName FROM Users WHERE ValidTo IS NULL");
-    $users = [];
-    if (mysqli_num_rows($queryUsers) > 0) {
-        while ($row = mysqli_fetch_assoc($queryUsers)) {
-            array_push($users, $row);
-        }
-    }
-    return $users;
-    for ($i = 0; $i < count($users); $i++) {
-        if ($users[$i]['UserName'] == $selectedname) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
 
 ?>
 
 <body class="bodyBackground fontFormat fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">
-
-    </div>
 
     <div class="row d-flex justify-content-start fixed-top p-0 m-0">
         <a href=UserManager.php class="col-1 text-center btn btn-secondary fw-bold">
@@ -117,8 +103,6 @@ function UserExists($selectedname)
 
                         $selected = $_POST['JobTitle'];
                         $selectedvalue = mysqli_query($connection, "SELECT JobTitles.ID FROM JobTitles WHERE JobTitles.JobTitle = '" . $selected . "'");
-
-
                         ?>
                         <tr>
                             <form name="ModForm" method="post" onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF'] ?>" class="d-flex justify-content-evenly">
@@ -132,14 +116,13 @@ function UserExists($selectedname)
                                     <input type="text" name="newemail" placeholder="Email" value="<?php echo $_POST['EmailAddress']; ?>">
                                 </td>
                                 <td>
-
-                                    <select class="custom-select p-0" name="newjobtitle">
-                                        <option value="1" <?php if ($selectedvalue == '1') echo 'selected="selected"'; ?>>Csoportvezető</option>
-                                        <option value="2" <?php if ($selectedvalue == '2') echo 'selected="selected"'; ?>>Scrum Master</option>
-                                        <option value="3" <?php if ($selectedvalue == '3') echo 'selected="selected"'; ?>>Fejlesztő</option>
-                                        <option value="4" <?php if ($selectedvalue == '4') echo 'selected="selected"'; ?>>Product Owner</option>
-                                        <option value="5" <?php if ($selectedvalue == '5') echo 'selected="selected"'; ?>>Tesztelő</option>
-                                        <option value="6" <?php if ($selectedvalue == '6') echo 'selected="selected"'; ?>>Business Analyst</option>
+                                    <select class="custom-select p-0" name="newjobtitle" >
+                                        <option value="1" <?php if ($selectedvalue == '1') echo 'selected'; ?>>Csoportvezető</option>
+                                        <option value="2" <?php if ($selectedvalue == '2') echo 'selected'; ?>>Scrum Master</option>
+                                        <option value="3" <?php if ($selectedvalue == '3') echo 'selected'; ?>>Fejlesztő</option>
+                                        <option value="4" <?php if ($selectedvalue == '4') echo 'selected'; ?>>Product Owner</option>
+                                        <option value="5" <?php if ($selectedvalue == '5') echo 'selected'; ?>>Tesztelő</option>
+                                        <option value="6" <?php if ($selectedvalue == '6') echo 'selected'; ?>>Business Analyst</option>
 
                                     </select>
                                 </td>
@@ -149,18 +132,20 @@ function UserExists($selectedname)
                                         <option value="0">Nem</option>
                                     </select>
                                 </td>
+                                <input type="hidden" name="ID" value="<?php echo $_POST['ID']; ?>">
                         </tr>
+                        
                     </table>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" class="btn btn-primary" name="submitUser" value="Mentés">
-                </div>
+                    <div class="modal-footer">
+                            <input type="submit" class="btn btn-primary" name="submitUser" value="Mentés">
+                    </div>
+                </div>               
             </form>
         </div>
     </div>
 
         
-        <?php 
+    <?php 
         $username2 = $_POST['newusername'];
         $name2 = $_POST['newname'];
         $email2 = $_POST['newemail'];
@@ -168,37 +153,20 @@ function UserExists($selectedname)
         $admin2 = $_POST['newisadmin'];
         $userID = $_POST['ID'];
         
-        
-        
         if (!empty($_POST)) 
         { 
             if (!UserExists($username2))
             {
-
+                
             }
             else 
             {
                 echo "<script>alert('Ez a felhasználónév már létezik')</script>";
                 
             }
-
-    <?php
-    $username2 = $_POST['newusername'];
-    $name2 = $_POST['newname'];
-    $email2 = $_POST['newemail'];
-    $jobtitle2 = $_POST['newjobtitle'];
-    $admin2 = $_POST['newisadmin'];
-    $userID = $_POST['ID'];
-
-    if (!empty($_POST)) {
-        if (!UserExists($username2)) {
-        } else {
-            echo "<script>alert('Ez a felhasználónév már létezik')</script>";
         }
-        
-    }
-
-
+   
+    
     ?>
 
     <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">

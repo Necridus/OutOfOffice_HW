@@ -6,7 +6,7 @@ session_start();
 if (!$_SESSION['Loggedin']) {
     header("Location:Login.php");
     exit;
-} elseif ($_SESSION['IsAdmin']) {
+} elseif ($_SESSION['!IsAdmin']) {
     header("Location:Login.php?noRights=true");
     exit;
 }
@@ -35,11 +35,16 @@ require_once('Connect.php');
         </a>
     </div>
 
+    <?php
+    
+    
+    ?>
+
     <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-10">
             <h1 class="text-center fw-bold mb-5">Új felhasználó hozzáadása</h1>
             <form name="MyForm" method="post" onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF'] ?>" class="d-flex justify-content-evenly">
-                <p>Azonosító: </p><input type="number" name="az" placeholder="Azonosító"></p>
+                <p>Azonosító: </p><input type="number" name="az" placeholder="Azonosító"></p>               
                 <p>Email cím: <input type="text" name="emailcim" placeholder="Email cím"></p>
                 <p>Felhasználónév: <input type="text" name="username" placeholder="Felhasználónév"></p>
                 <p>Jelszó <input type="text" name="dolgozo" placeholder="Jelszó"></p>
