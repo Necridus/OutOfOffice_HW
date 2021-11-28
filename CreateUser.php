@@ -18,11 +18,102 @@ require_once('Connect.php');
 <head>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <meta charset="utf-8">
-    <title>Create Request - Out Of Office</title>
+    <title>Create User - Out Of Office</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="OOOstyle.css">
 </head>
+<script>
+    function validateForm() {
+        let email = document.forms["NewForm"]["ujemail"].value;
+        let felhasznalo = document.forms["NewForm"]["ujusername"].value;
+        let jelszo = document.forms["NewForm"]["ujjelszo"].value;
+        let dolgozo = document.forms["NewForm"]["ujdolgozo"].value;
+        
+        if (email == "" || felhasznalo == "" || jelszo == "" || dolgozo == "") {
+            alert("Minden adatot meg kell adni!");
+            return false;
+        } else 
+        {
+            return true;
+        }
+    }
+</script>
+
+<?php
+   
+   function UserExists($selectedname)
+   {
+       include('Connect.php');
+       if (isset($_POST['AddUser'])) {
+           
+           $queryUsers = mysqli_query($connection, "SELECT UserName FROM Users WHERE ValidTo IS NULL");
+           $users = [];
+           if (mysqli_num_rows($queryUsers) > 0) {
+               while ($row = mysqli_fetch_assoc($queryUsers)) 
+               {
+                   array_push($users, $row);
+               }
+           }
+   
+           for ($i = 0; $i < count($users); $i++) 
+           {
+               if ($users[$i]['UserName'] == $selectedname) 
+               {
+   
+                   return true;
+               }
+           }
+           return false;
+       } 
+
+       else 
+       {
+           return false;
+       }
+   }
+
+$queryMaxIDResult = mysqli_query($connection, "SELECT ID FROM Users WHERE ValidTo IS NULL ORDER BY Users.ID DESC LIMIT 1");
+
+$maxIDRow = mysqli_fetch_assoc($queryMaxIDResult);
+
+$newID = $maxIDRow['ID'] + 1; // echo "<script>alert('$maxID')</script>";
+
+$email = $_POST['ujemail'];
+$username = $_POST['ujusername'];
+$password = sha1($_POST['ujjelszo']);
+$dolgozo = $_POST['ujdolgozo'];
+$jobtitle = $_POST['ujjobtitle'];
+$isadmin = $_POST['ujadmin'];
+
+$validFrom = date("Y-m-d H:i:s");
+
+if (!empty($_POST['AddUser'])) 
+{
+
+    if (!UserExists($username)) 
+    {
+            $insertIntoUsers = "INSERT INTO Users (ID, EmailAddress, UserName, Password, Name, JobTitle_FK, IsAdmin, ValidFrom, ValidTo) 
+                                            VALUES ('$newID','$email','$username','$password','$dolgozo', '$jobtitle', '$admin', '$validFrom', NULL)";
+            $result = mysqli_query($connection, $insertIntoUsers);
+            if ($result) 
+            {
+                echo "<script>alert('Felhasználó sikeresen hozzáadva')</script>";
+                header("Location:UserManager.php");
+            } else 
+            {
+                echo "<script>alert('Nem sikerült a felhasználót hozzáadni')</script>";
+                die(mysqli_error($connection));
+            }
+    }
+    
+    else 
+    {
+            echo "<script>alert('Ez a felhasználónév már létezik, válasszon másikat gex')</script>";
+    }
+}
+     
+?>
 
 <body class="bodyBackground fontFormat fw-bold">
 
@@ -35,38 +126,35 @@ require_once('Connect.php');
         </a>
     </div>
 
-    <?php
     
-    
-    ?>
 
 <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-8">
             <div class="row m-0 p-0">
             <h1 class="text-center fw-bold mb-5">Új felhasználó hozzáadása</h1>
-            <form name="MyForm" method="post" onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF'] ?>" class="d-flex justify-content-evenly">
+            <form name="NewForm" method="post" onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF'] ?>" class="d-flex justify-content-evenly">
             <table class="col-8 table table-striped table-bordered table-hover text-center align-middle">
             <tr>
             <td>Email cím: </td>
-            <td><input type="email" name="emailcim" placeholder="Email cím"></td>
+            <td><input type="email" name="ujemail" placeholder="Email cím"></td>
             </tr>
             <tr>
             <td>Felhasználónév: </td>
-            <td><input type="text" name="username" placeholder="Felhasználónév"></td>
+            <td><input type="text" name="ujusername" placeholder="Felhasználónév"></td>
             </tr>
             <tr>
             <td>Jelszó: </td>
-            <td><input type="password" name="jelszo" placeholder="Jelszó"></td>
+            <td><input type="password" name="ujjelszo" placeholder="Jelszó"></td>
             </tr>           
             <tr>
             <td>Dolgozó neve: </td>
-            <td><input type="text" name="dolgozo" placeholder="Dolgozó neve"></td>
+            <td><input type="text" name="ujdolgozo" placeholder="Dolgozó neve"></td>
             
             </tr>
             <tr>
             <td>Pozíció: </td>
             <td>
-                <select class="custom-select p-0" name="job">
+                <select class="custom-select p-0" name="ujjobtitle">
                     <option value="1">Csoportvezető</option>
                     <option value="2">Scrum Master</option>
                     <option value="3">Fejlesztő</option>
@@ -79,7 +167,7 @@ require_once('Connect.php');
             <tr>
             <td>Admin jogosultság: </td>
             <td>
-                <select class="custom-select p-0" name="isadmin">
+                <select class="custom-select p-0" name="ujadmin">
                     <option value="1">Igen</option>
                     <option value="0">Nem</option>
                 </select>
@@ -95,24 +183,6 @@ require_once('Connect.php');
             </div>
         </div>
 </div>
-
-
-            <p>Email cím: <input type="email" name="emailcim" placeholder="Email cím"></p>
-                <p>Felhasználónév: <input type="text" name="username" placeholder="Felhasználónév"></p>
-                <p>Jelszó: <input type="jelszo" name="jelszo" placeholder="Jelszó"></p><br>
-                <p>Dolgozó neve: <input type="text" name="dolgozo" placeholder="Név"></p>               
-                <p>Pozíció: <select class="custom-select p-0" name="job">
-                    <option value="1">Csoportvezető</option>
-                    <option value="2">Scrum Master</option>
-                    <option value="3">Fejlesztő</option>
-                    <option value="4">Product Owner</option>
-                    <option value="5">Tesztelő</option>
-                    <option value="6">Business Analyst</option>
-                </select></p>
-                <p>Admin jogosultság: <select class="custom-select p-0" name="isadmin">
-                    <option value="1">Igen</option>
-                    <option value="0">Nem</option>
-                </select></p>
 
     <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
         <a href=Logout.php class="col-1 text-end btn btn-secondary fw-bold">

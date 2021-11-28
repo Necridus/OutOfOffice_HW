@@ -18,7 +18,7 @@ require_once('Connect.php');
 
 <head>
     <meta charset="utf-8">
-    <title>ModifyUser - Out Of Office</title>
+    <title>Modify User - Out Of Office</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="OOOstyle.css">
@@ -45,20 +45,24 @@ function UserExists($selectedname)
         $queryUsers = mysqli_query($connection, "SELECT UserName FROM Users WHERE ValidTo IS NULL AND ID NOT IN ('" . $currentuserID . "')");
         $users = [];
         if (mysqli_num_rows($queryUsers) > 0) {
-            while ($row = mysqli_fetch_assoc($queryUsers)) {
+            while ($row = mysqli_fetch_assoc($queryUsers)) 
+            {
                 array_push($users, $row);
             }
         }
 
-        for ($i = 0; $i < count($users); $i++) {
-            if ($users[$i]['UserName'] == $selectedname) {
-
+        for ($i = 0; $i < count($users); $i++) 
+        {
+            if ($users[$i]['UserName'] == $selectedname) 
+            {
                 return true;
             }
         }
 
         return false;
-    } else {
+    } 
+    else 
+    {
         return false;
     }
 }
@@ -140,7 +144,7 @@ if (!empty($_POST['submitUser'])) {
 
                     ?>
                     <tr>
-                        <form name="ModForm" method="post" onsubmit="return validateForm()" action="ModifyUser.php" class="d-flex justify-content-evenly">
+                        <form name="ModForm" method="post" onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF'] ?>" class="d-flex justify-content-evenly">
                             <td>
                                 <input type="text" name="newname" placeholder="Név" value="<?php echo $_POST['Name']; ?>">
                             </td>
