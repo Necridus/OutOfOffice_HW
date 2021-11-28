@@ -176,7 +176,7 @@ if (!empty($_POST['AddUser']))
             
             </tr>
             </table>
-               
+            </div>  
             <div class="modal-footer">
             <input type="submit" class="btn btn-primary" name="AddUser" value="Hozzáadás"> 
             </div>
