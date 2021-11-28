@@ -91,10 +91,10 @@ if (!empty($_POST['submitUser'])) {
                                             VALUES ('$userID','$email2','$username2','$password','$name2', '$jobtitle2', '$admin2', '$validFrom', NULL)";
             $result = mysqli_query($connection, $insertIntoUsers);
             if ($result) {
-                echo "<script>alert('Felhasználó módosítva')</script>";
+                echo "<script>alert('Felhasználó adatai módosítva')</script>";
                 header("Location:UserManager.php");
             } else {
-                echo "<script>alert('Nem sikerült módosítani')</script>";
+                echo "<script>alert('Nem sikerült a felhasználó adatait módosítani')</script>";
                 die(mysqli_error($connection));
             }
         } else {
@@ -148,7 +148,7 @@ if (!empty($_POST['submitUser'])) {
                                 <input type="text" name="newusername" placeholder="Felhasználónév" value="<?php echo $_POST['UserName']; ?>">
                             </td>
                             <td>
-                                <input type="text" name="newemail" placeholder="Email" value="<?php echo $_POST['EmailAddress']; ?>">
+                                <input type="email" name="newemail" placeholder="Email" value="<?php echo $_POST['EmailAddress']; ?>">
                             </td>
                             <td>
                                 <select class="custom-select p-0" name="newjobtitle">
@@ -170,8 +170,8 @@ if (!empty($_POST['submitUser'])) {
                             <input type="hidden" name="ID" value="<?php echo $_POST['ID']; ?>">
                             <input type="hidden" name="Password" value="<?php echo $_POST['Password']; ?>">
                     </tr>
-
                 </table>
+                
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-primary" name="submitUser" value="Mentés">
                 </div>
