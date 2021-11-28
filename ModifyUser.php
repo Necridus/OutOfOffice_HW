@@ -46,7 +46,7 @@ require_once('Connect.php');
         
         {
         $currentuserID = $_POST['ID'];
-        $queryUsers = mysqli_query($connection,"SELECT UserName FROM Users WHERE ValidTo IS NULL AND ID IS NOT '" . $currentuserID . "'");
+        $queryUsers = mysqli_query($connection,"SELECT UserName FROM Users WHERE ValidTo IS NULL AND ID NOT IN ('" . $currentuserID . "')");
         $users = [];
                 if (mysqli_num_rows($queryUsers) > 0) 
                 {
@@ -60,6 +60,7 @@ require_once('Connect.php');
         {
             if ($users[$i]['UserName'] == $selectedname)
             {
+                
                 return true;
                 
             }
@@ -75,8 +76,61 @@ require_once('Connect.php');
         }   
         }
 
+        $username2 = $_POST['newusername'];
+        $name2 = $_POST['newname'];
+        $email2 = $_POST['newemail'];
+        $jobtitle2 = $_POST['newjobtitle'];
+        $admin2 = $_POST['newisadmin'];
 
-?>
+        $userID = $_POST['ID'];
+        $password = $_POST['Password'];
+
+        $validTo = date("Y-m-d H:i:s");
+        $validFrom = date("Y-m-d H:i:s");
+        
+        if (!empty($_POST['submitUser'])) 
+        { 
+            
+            if (!UserExists($username2))
+            {
+                echo "<script>alert('Henloooooooooooooooooooooooooooooooooooooooooooooooo2')</script>";
+                $queryModify = mysqli_query($connection, "SELECT * FROM Users WHERE ID = '$userID' AND ValidTo IS NULL");
+                $modify = mysqli_fetch_assoc($queryModify);
+                if (mysqli_num_rows($queryModify) != 0) 
+                {
+                    echo "<script>alert('Henlooooooooooooooooooooooooooooooooooooooooooooooooooooo3')</script>";
+        
+                        $setValidTo = "UPDATE Users set ValidTo = '$validTo' WHERE ID = '$userID' AND ValidTo IS NULL";
+            
+                        if (!mysqli_query($connection, $setValidTo)) {
+                            die(mysqli_error($connection));
+                        }
+            
+                        $insertIntoUsers = "INSERT INTO Users (ID, EmailAddress, UserName, Password, Name, JobTitle_FK, IsAdmin, ValidFrom, ValidTo) 
+                                            VALUES ('$userID','$email2','$username2','$password','$name2', '$jobtitle2', '$admin2', '$validFrom', NULL)";
+                        $result = mysqli_query($connection, $insertIntoUsers);
+                        if ($result) 
+                        {
+                            echo "<script>alert('Felhasználó módosítva')</script>";                          
+                        }
+                        else
+                        {
+                            echo "<script>alert('Nem sikerült módosítani')</script>";
+                            die(mysqli_error($connection));
+                        }
+
+                        
+                        
+            }
+            else 
+            {
+                echo "<script>alert('Ez a felhasználónév már létezik')</script>";
+                
+            }
+        }
+    }
+   
+ ?>
 
 <body class="bodyBackground fontFormat fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">
 
@@ -91,7 +145,7 @@ require_once('Connect.php');
 
     <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-10">
-            <form action="UserManager.php" method="POST">
+            
                 <div class="row m-0 p-0">
                     <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
                         <tr class="thead-dark fw-bold text-uppercase">
@@ -107,7 +161,7 @@ require_once('Connect.php');
                         $selectedvalue = mysqli_query($connection, "SELECT JobTitles.ID FROM JobTitles WHERE JobTitles.JobTitle = '" . $selected . "'");
                         ?>
                         <tr>
-                            <form name="ModForm" method="post" onsubmit="return validateForm()" action="<?php print $_SERVER['PHP_SELF'] ?>" class="d-flex justify-content-evenly">
+                            <form name="ModForm" method="post" onsubmit="return validateForm()" action="ModifyUser.php" class="d-flex justify-content-evenly">
                                 <td>
                                     <input type="text" name="newname" placeholder="Név" value="<?php echo $_POST['Name']; ?>">
                                 </td>
@@ -148,61 +202,7 @@ require_once('Connect.php');
     </div>
 
         
-    <?php 
-        $username2 = $_POST['newusername'];
-        $name2 = $_POST['newname'];
-        $email2 = $_POST['newemail'];
-        $jobtitle2 = $_POST['newjobtitle'];
-        $admin2 = $_POST['newisadmin'];
-
-        $userID = $_POST['ID'];
-        $password = $_POST['Password'];
-
-        $validTo = date("Y-m-d H:i:s");
-        $validFrom = date("Y-m-d H:i:s");
-
-        
-        
-        if (!empty($_POST)) 
-        { 
-            if (!UserExists($username2))
-            {
-                $queryModify = mysqli_query($connection, "SELECT * FROM Requests WHERE ID = '$userID' AND ValidTo IS NULL");
-                $modify = mysqli_fetch_assoc($queryModify);
-                if (mysqli_num_rows($queryModify) != 0) 
-                {
-        
-                        $setValidTo = "UPDATE Users set ValidTo = '$validTo' WHERE ID = '$userID'";
-            
-                        if (!mysqli_query($connection, $setValidTo)) {
-                            die(mysqli_error($connection));
-                        }
-            
-                        $insertIntoUsers = "INSERT INTO Users (ID, EmailAddress, UserName, Password, Name, JobTitle_FK, IsAdmin, ValidFrom, ValidTo) 
-                                            VALUES ('$userID','$email2','$username2','$password','$newname', '$jobtitle2', '$admin2', '$validFrom', NULL)";
-            
-                        if (!mysqli_query($connection, $insertIntoRequests)) {
-                            die(mysqli_error($connection));
-                        }
-
-                        if ($insertIntoUsers) {
-                            echo "<script>alert('Felhasználó módosítva')</script>";
-                        }
-                        else
-                        {
-                            echo "<script>alert('Nem sikerült módosítani')</script>";
-                        }
-            }
-            else 
-            {
-                echo "<script>alert('Ez a felhasználónév már létezik')</script>";
-                
-            }
-        }
-    }
-   
     
-    ?>
 
     <div class="row d-flex justify-content-end fixed-bottom p-0 m-0">
         <a href=Logout.php class="col-1 text-end btn btn-secondary fw-bold">
