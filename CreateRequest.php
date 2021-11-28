@@ -62,7 +62,7 @@ require_once('Connect.php');
             function getAdmins()
             {
                 include('Connect.php');
-                return mysqli_query($connection, "SELECT Users.EmailAddress, Users.UserName FROM Users WHERE isAdmin = 1");
+                return mysqli_query($connection, "SELECT Users.EmailAddress, Users.UserName FROM Users WHERE isAdmin = 1 AND ValidTo IS NULL");
             }
 
             function sendMailAboutNewRequest($adminEmails, $startDate, $endDate, $username)
@@ -73,7 +73,7 @@ require_once('Connect.php');
                 if ($sendMail == true) {
                     echo '<script>alert("Message was sent successfully!")</script>';
                 } else {
-                    echo '<script>alert("Message could not be sent, there is probably no e-mail adress added to this user!")</script>';
+                    echo '<script>alert("Message could not be sent, there is probably no e-mail address added to this user!")</script>';
                 }
             }
 
@@ -116,7 +116,7 @@ require_once('Connect.php');
                 $startDate = $_POST['startDate'];
                 $endDate = $_POST['endDate'];
                 $validFrom = date("Y-m-d H:i:s");
-                $userID = $connection->query("SELECT Users.ID FROM Users WHERE UserName = '$username'")->fetch_object()->ID;
+                $userID = $connection->query("SELECT Users.ID FROM Users WHERE UserName = '$username' AND ValidTo IS NULL")->fetch_object()->ID;
                 if (!hasOverlap($startDate, $endDate, getRequests())) {
                     $result = mysqli_query($connection, "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','Függőben','$validFrom', NULL)");
                     if ($result) {
