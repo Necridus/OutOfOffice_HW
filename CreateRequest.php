@@ -106,7 +106,7 @@ require_once('Connect.php');
                 }
                 return $requests;
             }
-            //TO DO
+            
             //Megvizsgálja, hogy az adott kezdő és befejező dátummal rendelkező szabadság átfedésben van-e egy másikkal
             function hasOverlap($newStartDate, $newEndDate, $requests)
             {
