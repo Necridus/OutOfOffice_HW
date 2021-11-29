@@ -52,12 +52,12 @@ require_once('Connect.php');
                 if ($connection->query($deleteRequestsQuery) === TRUE) {
                     $deleteUserQuery = "UPDATE Users SET ValidTo = NOW() WHERE ID=$id";
                     if ($connection->query($deleteUserQuery) === TRUE) {
-                        echo "<script>alert('A felhasználó az adatbázisból eltávolításra került')</script>";
+                        echo "<script>alert('A felhasználó az adatbázisból eltávolításra került!')</script>";
                     } else {
-                        echo "<script>alert('Nem sikerült eltávolítani a felhasználót: <?php echo $connection->error; ?>')</script>";
+                        echo "<script>alert('Nem sikerült eltávolítani a felhasználót: ". $connection->error."!')</script>";
                     }
                 } else {
-                    echo "<script>alert('Nem sikerült eltávolítani a felhasználót: <?php echo $connection->error; ?>')</script>";
+                    echo "<script>alert('Nem sikerült eltávolítani a felhasználót: ". $connection->error."!')</script>";
                 }
             }
             if (isset($_GET['UserToBeDeleted'])) 
@@ -134,11 +134,10 @@ require_once('Connect.php');
                                 </form>
                             </td>
                             <td>
-                                <form method="post">
-                                    <!--Forrás: https://stackoverflow.com/questions/19323010/execute-php-function-with-onclick-->
-                                    <a class="btn btn-outline-danger" onClick="return confirm('Biztosan törli?')" href='UserManager.php?UserToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
+                                <form method="get" action="UserManager.php?UserToBeDeleted=<?php echo ($row['ID']); ?>">
+                                    <input type="submit" class="btn btn-outline-danger" onClick="return confirm('Biztosan törli?')" <?php if($row['UserName'] == $_SESSION['Username']) echo ("disabled"); ?> value="Törlés">
                                 </form>
-
+                                
                             </td>
                         </tr>
                     <?php

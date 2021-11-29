@@ -61,9 +61,9 @@ if (isset($_POST['submitChange'])) {
             $sendMail = mail($user['EmailAddress'], "Out Of Office Request with starting Date " . $startDate . " was modified", "Dear " . $user['Name'] . "! \n\n Your Request status is modified to: " . $selectedStatus . "! \n Log in to http://portalbce.hu/DF9YEV/OutOfOffice_HW/Login.php to see your Requests and their current states. \n\n This is an automated message sent by the server, please don't respond to this, contact the administrators instead.");
 
             if ($sendMail) {
-                echo '<script>alert("Message was sent successfully!")</script>';
+                echo '<script>alert("E-mail sikeresen elküldve!")</script>';
             } else {
-                echo '<script>alert("Message could not be sent, there is probably no e-mail address added to this user!")</script>';
+                echo '<script>alert("E-mail küldés sikertelen!")</script>';
             }
         }
     }
@@ -105,13 +105,14 @@ if (isset($_POST['submitChange'])) {
             </h1>
 
             <h2 class="text-center fw-bold mt-4 mb-4">
-                Jövőbeli szabadságkérések
+                Jelenlegi/Jövőbeli szabadságkérések
             </h2>
             <?php
-            $queryAllRequests = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests 
+            $queryAllRequestsInTheFuture = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests 
                     JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL AND Requests.StartDate >= NOW() ORDER BY Requests.StartDate");
-            ?>
-
+            
+            if (mysqli_num_rows($queryAllRequestsInTheFuture) != 0) {
+                ?>
             <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
                 <tr class="thead-dark fw-bold text-uppercase">
                     <td>
@@ -130,7 +131,7 @@ if (isset($_POST['submitChange'])) {
 
                 <?php
                 $rowNumber = 0;
-                while ($row = mysqli_fetch_assoc($queryAllRequests)) {
+                while ($row = mysqli_fetch_assoc($queryAllRequestsInTheFuture)) {
                 ?>
                     <tr>
                         <td>
@@ -167,16 +168,22 @@ if (isset($_POST['submitChange'])) {
                 }
                 ?>
             </table>
-
+            <?php 
+            }
+            else {
+                echo ("<h4>Nincs közelgő szabadságkérelmed!</h4>");
+            }
+            ?>
             <h2 class="text-center fw-bold mt-4 mb-4">
                 Korábbi szabadságkérések
             </h2>
 
             <?php
-            $queryAllRequests = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests 
-                    JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL AND Requests.StartDate < NOW() ORDER BY Requests.StartDate");
-            ?>
-
+            $queryAllRequestsInThePast = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests 
+                    JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL AND Requests.EndDate < NOW() ORDER BY Requests.StartDate");
+            
+            if (mysqli_num_rows($queryAllRequestsInThePast) != 0) {
+                ?>
             <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
                 <tr class="thead-dark fw-bold text-uppercase">
                     <td>
@@ -194,7 +201,7 @@ if (isset($_POST['submitChange'])) {
                 </tr>
 
                 <?php
-                while ($row = mysqli_fetch_assoc($queryAllRequests)) {
+                while ($row = mysqli_fetch_assoc($queryAllRequestsInThePast)) {
                 ?>
                     <tr>
                         <td>
@@ -219,7 +226,12 @@ if (isset($_POST['submitChange'])) {
                 }
                 ?>
             </table>
-
+            <?php 
+            }
+            else {
+                echo ("<h4>Nincs korábbi szabadságkérelmed!</h4>");
+            }
+            ?>
         </div>
         <div>
 

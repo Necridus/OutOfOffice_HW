@@ -96,14 +96,14 @@ if (!empty($_POST['submitUser'])) {
                                             VALUES ('$userID','$email2','$username2','$password','$name2', '$jobtitle2', '$admin2', '$validFrom', NULL)";
             $result = mysqli_query($connection, $insertIntoUsers);
             if ($result) {
-                echo "<script>alert('Felhasználó adatai módosítva')</script>";
+                echo "<script>alert('Felhasználó adatai módosítva!')</script>";
                 header("Location:UserManager.php");
             } else {
-                echo "<script>alert('Nem sikerült a felhasználó adatait módosítani')</script>";
+                echo "<script>alert('Nem sikerült a felhasználó adatait módosítani!')</script>";
                 die(mysqli_error($connection));
             }
         } else {
-            echo "<script>alert('Ez a felhasználónév már létezik')</script>";
+            echo "<script>alert('Ez a felhasználónév már létezik!')</script>";
         }
     }
 }

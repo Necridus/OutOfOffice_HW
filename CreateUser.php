@@ -78,8 +78,7 @@ $queryMaxIDResult = mysqli_query($connection, "SELECT ID FROM Users WHERE ValidT
 
 $maxIDRow = mysqli_fetch_assoc($queryMaxIDResult);
 
-$newID = $maxIDRow['ID'] + 1; // echo "<script>alert('$maxID')</script>";
-
+$newID = $maxIDRow['ID'] + 1;
 $email = $_POST['ujemail'];
 $username = $_POST['ujusername'];
 $password = sha1($_POST['ujjelszo']);
@@ -99,18 +98,18 @@ if (!empty($_POST['AddUser']))
             $result = mysqli_query($connection, $insertIntoUsers);
             if ($result) 
             {
-                echo "<script>alert('Felhasználó sikeresen hozzáadva')</script>";
+                echo "<script>alert('Felhasználó sikeresen hozzáadva!')</script>";
                 header("Location:UserManager.php");
             } else 
             {
-                echo "<script>alert('Nem sikerült a felhasználót hozzáadni')</script>";
+                echo "<script>alert('Nem sikerült a felhasználót hozzáadni!')</script>";
                 die(mysqli_error($connection));
             }
     }
     
     else 
     {
-            echo "<script>alert('Ez a felhasználónév már létezik, válasszon másikat gex')</script>";
+            echo "<script>alert('Ez a felhasználónév már létezik, válasszon másikat!')</script>";
     }
 }
      

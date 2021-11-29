@@ -66,9 +66,9 @@ require_once('Connect.php');
                 $id = $_GET['requestToBeDeleted'];
                 $deleteQuery = "UPDATE Requests SET ValidTo = NOW() WHERE ID=$id and ValidTo IS NULL";
                 if ($connection->query($deleteQuery) === TRUE) {
-                    echo "<script>alert('Szabadság kérelem eltávolítva')</script>";
+                    echo "<script>alert('Szabadság kérelem eltávolítva!')</script>";
                 } else {
-                    echo "<script>alert('Nem sikerült eltávolítani a szabadság kérelmet: <?php echo $connection->error; ?>')</script>";
+                    echo "<script>alert('Nem sikerült eltávolítani a szabadság kérelmet: <?php echo $connection->error; ?>!')</script>";
                 }
             }
 
@@ -78,11 +78,11 @@ require_once('Connect.php');
 
             $username = $_SESSION['Username'];
             $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= NOW() AND Requests.ValidTo IS NULL AND Users.ValidTo IS NULL ORDER BY Requests.ID");
-            $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate < NOW() AND Requests.ValidTo IS NULL AND Users.ValidTo IS NULL ORDER BY Requests.ID");
+            $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.EndDate < NOW() AND Requests.ValidTo IS NULL AND Users.ValidTo IS NULL ORDER BY Requests.ID");
 
             if (mysqli_num_rows($queryMyUpcomingRequests) != 0) {
             ?>
-                <h1 class="text-center fw-bold">Közelgő szabadságaim</h1>
+                <h1 class="text-center fw-bold">Jelenlegi/Közelgő szabadságaim</h1>
 
                 <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
                     <tr class="thead-dark fw-bold text-uppercase">
@@ -135,7 +135,7 @@ require_once('Connect.php');
                     }
                 } else {
                     ?>
-                    <h4>Nincs közelgő szabadságod</h4>
+                    <h4>Nincs közelgő szabadságkérelmed!</h4>
                 <?php
                 }
                 ?>
@@ -190,7 +190,7 @@ require_once('Connect.php');
                     }
                 } else {
                     ?>
-                    <h4>Még nem voltak szabadságaid/szabadság kérelmeid</h4>
+                    <h4>Még nem voltak szabadságkérelmeid!</h4>
                 <?php
                 }
                 ?>
