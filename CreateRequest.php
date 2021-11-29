@@ -34,11 +34,11 @@ require_once('Connect.php');
             return false;
         } else {
             if (startDate > endDate) {
-                alert("A kező dátumnak korábban kell lennie mint a befejező dátumnak");
+                alert("A kező dátumnak korábban kell lennie mint a befejező dátumnak!");
                 return false;
             }
             if (startDate < today || endDate < today){
-                alert("A kiválasztott dátumoknak később kell lenniük mint a jelenlegi dátum");
+                alert("A kiválasztott dátumoknak később kell lenniük mint a jelenlegi dátum!");
                 return false;
             }
         }
@@ -83,9 +83,9 @@ require_once('Connect.php');
                     $sendMail = mail($row['EmailAddress'], "New Request has been created", "Dear " . $row['UserName'] . "! \n\n New Out Of Office Request has been created by " . $username . " from " . $startDate . " to " . $endDate . "! \n Log in to http://portalbce.hu/DF9YEV/OutOfOffice_HW/Login.php to see the Request. \n\n This is an automated message sent by the server, please don't respond to this.");
                 }
                 if ($sendMail == true) {
-                    echo '<script>alert("Message was sent successfully!")</script>';
+                    echo '<script>alert("E-mail sikeresen elküldve!")</script>';
                 } else {
-                    echo '<script>alert("Message could not be sent, there is probably no e-mail address added to this user!")</script>';
+                    echo '<script>alert("E-mail küldés sikertelen!")</script>';
                 }
             }
 
@@ -128,13 +128,13 @@ require_once('Connect.php');
                 if (!hasOverlap($startDate, $endDate, getRequests())) {
                     $result = mysqli_query($connection, "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','Függőben','$validFrom', NULL)");
                     if ($result) {
-                        echo "<script>alert('Szabadság kérelem hozzáadva')</script>";
+                        echo "<script>alert('Szabadság kérelem hozzáadva!')</script>";
                         //sendMailAboutNewRequest(getAdmins(),$startDate,$endDate,$username);
                     } else {
-                        echo "<script>alert('Nem sikerült továbbítani a kérést az adatbázis számára')</script>";
+                        echo "<script>alert('Nem sikerült továbbítani a kérést az adatbázis számára!')</script>";
                     }
                 } else {
-                    echo "<script>alert('Ez a szabadság átfedésben van egy másikkal')</script>";
+                    echo "<script>alert('Ez a szabadság átfedésben van egy másikkal!')</script>";
                 }
             }
             ?>
