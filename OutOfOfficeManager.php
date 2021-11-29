@@ -109,7 +109,7 @@ if (isset($_POST['submitChange'])) {
             </h2>
             <?php
             $queryAllRequestsInTheFuture = mysqli_query($connection, "SELECT Users.Name, Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status FROM Requests 
-                    JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL AND Requests.StartDate >= NOW() ORDER BY Requests.StartDate");
+                    JOIN Users ON Requests.UserID = Users.ID WHERE Requests.ValidTo IS NULL AND Requests.EndDate >= NOW() ORDER BY Requests.StartDate");
             
             if (mysqli_num_rows($queryAllRequestsInTheFuture) != 0) {
                 ?>
@@ -171,8 +171,11 @@ if (isset($_POST['submitChange'])) {
             <?php 
             }
             else {
-                echo ("<h4>Nincs közelgő szabadságkérelmed!</h4>");
-            }
+                
+            ?>
+                <h4 class="text-center">Nincs közelgő szabadságkérelem!</h4>
+                <?php
+                }
             ?>
             <h2 class="text-center fw-bold mt-4 mb-4">
                 Korábbi szabadságkérések
@@ -229,8 +232,10 @@ if (isset($_POST['submitChange'])) {
             <?php 
             }
             else {
-                echo ("<h4>Nincs korábbi szabadságkérelmed!</h4>");
-            }
+                ?>
+                <h4 class="text-center">Nincs korábbi szabadságkérelem!</h4>
+                <?php 
+                }
             ?>
         </div>
         <div>

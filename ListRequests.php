@@ -56,7 +56,7 @@ require_once('Connect.php');
     <div class="d-flex justify-content-center">
         <div class="commonContainer rounded col-10">
             <h2 class="text-secondary fw-bold">Hello, <?php echo $_SESSION['Username'] ?>!</h2>
-
+            <h1 class="text-center fw-bold">Jelenlegi/Közelgő szabadságaim</h1>
             <?php
 
             function deleteRequest()
@@ -77,13 +77,11 @@ require_once('Connect.php');
             }
 
             $username = $_SESSION['Username'];
-            $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.StartDate >= NOW() AND Requests.ValidTo IS NULL AND Users.ValidTo IS NULL ORDER BY Requests.ID");
+            $queryMyUpcomingRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.EndDate >= NOW() AND Requests.ValidTo IS NULL AND Users.ValidTo IS NULL ORDER BY Requests.ID");
             $queryMyPastRequests = mysqli_query($connection, "SELECT Requests.ID, Requests.UserID, Requests.StartDate, Requests.EndDate, Requests.Status, Requests.ValidFrom FROM Requests JOIN Users ON Requests.UserID = Users.ID WHERE Users.Username = '" . $username . "' AND Requests.EndDate < NOW() AND Requests.ValidTo IS NULL AND Users.ValidTo IS NULL ORDER BY Requests.ID");
 
             if (mysqli_num_rows($queryMyUpcomingRequests) != 0) {
             ?>
-                <h1 class="text-center fw-bold">Jelenlegi/Közelgő szabadságaim</h1>
-
                 <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
                     <tr class="thead-dark fw-bold text-uppercase">
                         <td>
@@ -135,7 +133,7 @@ require_once('Connect.php');
                     }
                 } else {
                     ?>
-                    <h4>Nincs közelgő szabadságkérelmed!</h4>
+                    <h4 class="text-center">Nincs közelgő szabadságkérelmed!</h4>
                 <?php
                 }
                 ?>
@@ -190,7 +188,7 @@ require_once('Connect.php');
                     }
                 } else {
                     ?>
-                    <h4>Még nem voltak szabadságkérelmeid!</h4>
+                    <h4 class="text-center">Még nem voltak szabadságkérelmeid!</h4>
                 <?php
                 }
                 ?>
