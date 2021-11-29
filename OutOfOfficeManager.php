@@ -155,7 +155,7 @@ if (isset($_POST['submitChange'])) {
                                 <input type="hidden" name="StartDate" value="<?php echo ($row['StartDate']); ?>">
                                 <input type="hidden" name="EndDate" value="<?php echo ($row['EndDate']); ?>">
                                 <input type="hidden" name="Status" value="<?php echo ($row['Status']); ?>">
-                                <input type="submit" class="btn btn-link p-0 m-0" value="Módosítás">
+                                <input type="submit" class="btn btn-outline-dark" value="Módosítás">
                             </form>
 
                         </td>

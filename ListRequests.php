@@ -125,7 +125,7 @@ require_once('Connect.php');
                             <td>
                                 <form method="post">
                                     <!--Forrás: https://stackoverflow.com/questions/19323010/execute-php-function-with-onclick-->
-                                    <a  onclick="return confirm('Biztosan törölni szeretnéd ezt az elemet?');" class="btn btn-link p-0 m-0" href='ListRequests.php?requestToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
+                                    <a  onclick="return confirm('Biztosan törölni szeretnéd ezt az elemet?');" class="btn btn-outline-danger" href='ListRequests.php?requestToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
                                 </form>
                             </td>
                         </tr>
