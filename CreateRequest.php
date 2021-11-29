@@ -129,7 +129,7 @@ require_once('Connect.php');
                     $result = mysqli_query($connection, "INSERT INTO Requests (UserID, StartDate, EndDate, Status, ValidFrom, ValidTo) VALUES ('$userID','$startDate','$endDate','Függőben','$validFrom', NULL)");
                     if ($result) {
                         echo "<script>alert('Szabadság kérelem hozzáadva!')</script>";
-                        //sendMailAboutNewRequest(getAdmins(),$startDate,$endDate,$username);
+                        sendMailAboutNewRequest(getAdmins(),$startDate,$endDate,$username);
                     } else {
                         echo "<script>alert('Nem sikerült továbbítani a kérést az adatbázis számára!')</script>";
                     }
