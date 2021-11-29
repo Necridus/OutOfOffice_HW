@@ -24,6 +24,8 @@ require_once('Connect.php');
     <link rel="shortcut icon" href="images/favicon.ico">
 </head>
 
+
+
 <body class="bodyBackground fontFormat">
 
     <div class="row d-flex justify-content-start fixed-top p-0 m-0">
@@ -58,8 +60,11 @@ require_once('Connect.php');
                     echo "<script>alert('Nem sikerült eltávolítani a felhasználót: <?php echo $connection->error; ?>')</script>";
                 }
             }
-            if (isset($_GET['UserToBeDeleted'])) {
+            if (isset($_GET['UserToBeDeleted'])) 
+            {
+                
                 deleteuser();
+              
             }
 
             $queryAllUsers = mysqli_query($connection, "SELECT Users.ID, Users.Name, Users.Password, Users.UserName, Users.EmailAddress, JobTitles.JobTitle, Users.ValidFrom, Users.ValidTo, Users.IsAdmin FROM Users 
@@ -70,7 +75,7 @@ require_once('Connect.php');
             ?>
                 <h1 class="text-center text-uppercase fw-bold">Felhasználók</h1>
                 <table class="col-12 table table-striped table-bordered table-hover text-center align-middle">
-                    <tr> <a href='CreateUser.php'>Új felhasználó hozzáadása</a></tr>
+                    <tr><td colspan='8'> <a href='CreateUser.php' class="btn btn-info btn-block">Új felhasználó hozzáadása</a></td></tr>
                     <tr class="thead-dark fw-bold text-uppercase">
                         <td>Dolgozó</td>
                         <td>Felhasználónév</td>
@@ -124,14 +129,14 @@ require_once('Connect.php');
                                     <input type="hidden" name="ValidFrom" value="<?php echo ($row['ValidFrom']); ?>">
                                     <input type="hidden" name="ValidTo" value="<?php echo ($row['ValidTo']); ?>">
 
-                                    <input type="submit" class="btn btn-link p-0 m-0" value="Módosítás">
+                                    <input type="submit" class="btn btn-outline-dark" value="Módosítás">
 
                                 </form>
                             </td>
                             <td>
                                 <form method="post">
                                     <!--Forrás: https://stackoverflow.com/questions/19323010/execute-php-function-with-onclick-->
-                                    <a class="btn btn-link p-0 m-0" href='UserManager.php?UserToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
+                                    <a class="btn btn-outline-danger" onClick="return confirm('Biztosan törli?')" href='UserManager.php?UserToBeDeleted=<?php echo ($row['ID']); ?>'>Törlés</a>
                                 </form>
 
                             </td>
