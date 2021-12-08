@@ -134,10 +134,9 @@ require_once('Connect.php');
                                 </form>
                             </td>
                             <td>
-                                <form method="get" action="UserManager.php?UserToBeDeleted=<?php echo ($row['ID']); ?>">
-                                    <input type="submit" class="btn btn-outline-danger" onClick="return confirm('Biztosan törli?')" <?php if($row['UserName'] == $_SESSION['Username']) echo ("disabled"); ?> value="Törlés">
+                                <form method="post" action='UserManager.php?UserToBeDeleted=<?php echo ($row['ID']); ?>'>
+                                <input type="submit" class="btn btn-outline-danger" onClick="return confirm('Biztosan törli?')" <?php if($row['UserName'] == $_SESSION['Username']) echo ("disabled"); ?> value="Törlés">                                </form>
                                 </form>
-                                
                             </td>
                         </tr>
                     <?php
